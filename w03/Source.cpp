@@ -87,7 +87,7 @@ int main()
 	pd = static_cast<double *>(ppii);	// Works
 
 	delete ppii;
-
+		
 	system("pause");
 	return 0;
 }
