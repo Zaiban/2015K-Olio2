@@ -65,14 +65,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="City.cpp" />
     <ClCompile Include="Henkilo.cpp" />
     <ClCompile Include="Henkilo_ptr.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="City.h" />
     <ClInclude Include="Henkilo.h" />
     <ClInclude Include="Henkilo_ptr.h" />
+    <ClInclude Include="max.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
