@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Stack.h"
+#include "Fraction.h"
 
 using std::cout; using std::endl; using std::cin;
 
@@ -53,6 +54,8 @@ void test_1()
 }
 void test_2()
 {
+	Fraction f(5, 2);
+	cout << f << endl;
 }
 void test_3()
 {

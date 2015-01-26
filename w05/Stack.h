@@ -1,4 +1,5 @@
 #pragma once
+#include "stdafx.h"
 
 template<typename T, int SIZE = 10>
 class Stack
@@ -19,7 +20,6 @@ private:
 template<typename T, int SIZE>
 Stack<T, SIZE>::Stack()
 {
-	//SIZE = s > 0 ? s : 10;
 	mTop = -1; // Stack initially empty
 	mStackPtr = new T[SIZE];
 } // end Stack constructor

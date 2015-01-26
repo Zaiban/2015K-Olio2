@@ -65,10 +65,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Fraction.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fraction.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
