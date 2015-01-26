@@ -4,7 +4,7 @@
 
 City::City()
 {
-	mData = new Data("");
+	mData = new Data();
 }
 City::City(const string &name)
 {

@@ -15,7 +15,7 @@ private:
 	class Data
 	{
 	public:
-		Data(string paikkakunta);
+		Data(string paikkakunta = "");
 		const string &Name(void) const;
 		long Count();
 		long operator++();
