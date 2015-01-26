@@ -10,9 +10,9 @@ void test_2();
 void test_3();
 void test_4();
 // function template to manipulate Stack<T>
-template<typename T>
+template<typename T, int SIZE = 10>
 void testStack(
-	Stack<T> &theStack, // reference to Stack<T>
+	Stack<T, SIZE> &theStack, // reference to Stack<T>
 	T value, // initial value to push
 	T increment, // increment for subsequent values
 	const char *stackName); // name of the Stack<T> object
@@ -46,7 +46,7 @@ int main()
 }
 void test_1()
 {
-	Stack<double> doubleStack;
+	Stack<double, 5> doubleStack;
 	Stack<int> intStack;
 	testStack(doubleStack, 1.1, 1.1, "doubleStack");
 	testStack(intStack, 1, 1, "intStack");
@@ -60,8 +60,8 @@ void test_3()
 void test_4()
 {
 }
-template<typename T>
-void testStack(Stack<T> &theStack, T value, T increment, const char *stackName)
+template<typename T, int SIZE>
+void testStack(Stack<T, SIZE> &theStack, T value, T increment, const char *stackName)
 {
 	cout << "\nPushing elements onto " << stackName << '\n';
 	while (theStack.push(value))
