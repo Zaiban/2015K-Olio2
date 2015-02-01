@@ -8,6 +8,7 @@ public:
 	Fraction(const Fraction &org);
 	~Fraction();
 	Fraction& operator=(const Fraction &source);
+	Fraction& operator+=(const Fraction &other);
 	friend std::ostream& operator<<(std::ostream &output, const Fraction &F);
 
 private:

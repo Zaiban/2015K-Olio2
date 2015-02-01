@@ -66,11 +66,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Fraction.cpp" />
+    <ClCompile Include="ownTextStack.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Fraction.h" />
+    <ClInclude Include="ownStack.h" />
+    <ClInclude Include="ownTextStack.h" />
     <ClInclude Include="Stack.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

@@ -1,6 +1,8 @@
 #include "stdafx.h"
 #include "Stack.h"
 #include "Fraction.h"
+#include "ownTextStack.h"
+#include "ownStack.h"
 
 using std::cout; using std::endl; using std::cin;
 
@@ -22,7 +24,7 @@ int main()
 {
 	char command[2];
 
-	cout << "Type the number of the test program(1, 2, 3, 4)" << endl;
+	cout << "Type the number of the test program(1, 2, 3, 4) ";
 	cin.getline(command, 2);
 
 	switch (command[0]){
@@ -36,7 +38,7 @@ int main()
 		test_3();
 		break;
 	case '4':
-		test_3();
+		test_4();
 		break;
 	};
 
@@ -54,20 +56,34 @@ void test_1()
 }
 void test_2()
 {
-	Fraction f(5, 2);
-	cout << f << endl;
+	Stack<Fraction> fracStack;
+	testStack(fracStack, Fraction(1, 2), Fraction(1, 4), "fracStack");
 }
 void test_3()
 {
+	ownTextStack ots;
+	cout << ots << endl;
+	ots.push("apple");
+	ots.push("tree");
+	cout << ots << endl;
 }
 void test_4()
 {
+	ownStack<int> os;
+	cout << "free slots: " << os.space() << endl;
+	cout << "pushing 1 item" << endl;
+	os.push(5);
+	cout << "free slots: " << os.space() << endl;
+	cout << "pushing 2 items" << endl;
+	os.push(5);
+	os.push(5);
+	cout << "free slots: " << os.space() << endl;
 }
 template<typename T, int SIZE>
 void testStack(Stack<T, SIZE> &theStack, T value, T increment, const char *stackName)
 {
 	cout << "\nPushing elements onto " << stackName << '\n';
-	while (theStack.push(value))
+ 	while (theStack.push(value))
 	{
 		cout << value << ' ';
 		value += increment;

@@ -7,12 +7,13 @@ class Stack
 public:
 	Stack();
 	~Stack();
-	bool push(const T&);
-	bool pop(T&);
+	bool push(const T &pushValue);
+	bool pop(T &popValue);
+	bool top(T &topValue) const;
 	bool isEmpty() const;
 	bool isFull() const;
 
-private:
+protected:
 	int mTop; // location of the top element
 	T *mStackPtr;
 };
@@ -49,6 +50,16 @@ bool Stack<T, SIZE>::pop(T &popValue)
 		return true; // pop successful
 	}
 	return false; // pop unsuccessful
+}
+template<typename T, int SIZE>
+bool Stack<T, SIZE>::top(T &topValue) const
+{
+	if (!isEmpty())
+	{
+		topValue = mStackPtr[mTop];
+		return true;
+	}
+	return false;
 }
 template<typename T, int SIZE>
 bool Stack<T, SIZE>::isEmpty() const
