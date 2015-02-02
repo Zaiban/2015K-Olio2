@@ -68,7 +68,43 @@ void test_1()
 }
 void test_2()
 {
+	std::vector<std::string> words;
+	std::string line;
+	std::string word;
+	std::string::size_type pos, size;
+	std::ifstream file;
+	file.open("merkkijono.txt");
 
+	while (std::getline(file, line)){
+		pos = 0;
+		while (size = line.find(" ", pos))
+		{
+			word = line.substr(pos, size - pos);
+			for (int i = 0; i < word.size(); i++)
+			{
+				if ((word[i] > ' ' && word[i] < '/') 
+					|| (word[i] > '9' && word[i] < 'A')
+					|| (word[i] > 'Z' && word[i] < 'a')
+					|| (word[i] > 'z') )
+					word.erase(i, 1);
+			}
+			words.push_back(word);
+			pos = size + 1;
+			if (size > line.size()) break;
+		}
+	}
+	std::sort(words.begin(), words.end());
+	if (DEBUG)
+	{
+		for (int i = 0; i < words.size(); i++)
+		{
+			cout << words.at(i) << endl;
+		}
+	}
+	else
+	{
+		// TODO: output to file
+	}
 }
 void test_3()
 {
