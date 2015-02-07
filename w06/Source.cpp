@@ -1,7 +1,7 @@
 #include "stdafx.h"
 using std::cout; using std::cin; using std::endl;
 
-const bool DEBUG = true;
+const bool DEBUG = false;
 
 void test_1();
 void test_2();
@@ -35,35 +35,50 @@ int main()
 	system("pause");
 	return 0;
 }
-void test_1()	
+void test_1()
 {
 	std::vector<std::string> words;
 	std::string line;
 	std::string::size_type pos, size;
-	std::ifstream file;
-	file.open("merkkijono.txt");
-
-	while (std::getline(file, line)){
-		pos = 0;
-		while (size = line.find(" ", pos))
-		{
-			words.push_back(line.substr(pos, size - pos));
-			pos = size + 1;
-			if (size > line.size()) break;
-		}
-	}
-	std::sort(words.begin(), words.end());
-	if (DEBUG)
+	std::ifstream ifs;
+	ifs.open("merkkijono.txt");
+	if (ifs.is_open())
 	{
-		for (int i = 0; i < words.size(); i++)
+		while (std::getline(ifs, line)){
+			pos = 0;
+			while (size = line.find(" ", pos))
+			{
+				words.push_back(line.substr(pos, size - pos));
+				pos = size + 1;
+				if (size > line.size()) break;
+			}
+		}
+		std::sort(words.begin(), words.end());
+		if (DEBUG)
 		{
-			cout << words.at(i) << endl;
+			for (int i = 0; i < words.size(); i++)
+			{
+				cout << words.at(i) << endl;
+			}
+		}
+		else // if debug is OFF
+		{
+			std::ofstream ofs;
+			ofs.open("merkkijono_abc.txt");
+
+			if (ofs.is_open())
+			{
+				for (int i = 0; i < words.size(); i++)
+				{
+					ofs << words.at(i) << endl;
+				}
+			}
+			else
+				std::cerr << "Error: cannot open file" << endl;
 		}
 	}
 	else
-	{
-		// TODO: output to file
-	}
+		std::cerr << "Error: cannot open file" << endl;
 
 }
 void test_2()
@@ -72,43 +87,135 @@ void test_2()
 	std::string line;
 	std::string word;
 	std::string::size_type pos, size;
-	std::ifstream file;
-	file.open("merkkijono.txt");
+	std::ifstream ifs;
+	ifs.open("merkkijono.txt");
 
-	while (std::getline(file, line)){
-		pos = 0;
-		while (size = line.find(" ", pos))
-		{
-			word = line.substr(pos, size - pos);
-			for (int i = 0; i < word.size(); i++)
-			{
-				if ((word[i] > ' ' && word[i] < '/') 
-					|| (word[i] > '9' && word[i] < 'A')
-					|| (word[i] > 'Z' && word[i] < 'a')
-					|| (word[i] > 'z') )
-					word.erase(i, 1);
-			}
-			words.push_back(word);
-			pos = size + 1;
-			if (size > line.size()) break;
-		}
-	}
-	std::sort(words.begin(), words.end());
-	if (DEBUG)
+	if (ifs.is_open())
 	{
-		for (int i = 0; i < words.size(); i++)
+		// loop through all the lines in the file
+		while (std::getline(ifs, line)){
+			pos = 0;
+			// find the next empty space in the line
+			while (size = line.find(" ", pos))
+			{
+				// save the next word in a substring
+				word = line.substr(pos, size - pos);
+				// loop through the word to check in case of illegal characters
+				for (int i = 0; i < word.size(); i++)
+				{
+					if ( (word[i] == '	')
+						|| (word[i] >= ' ' && word[i] <= '/')
+						|| (word[i] > '9' && word[i] < 'A')
+						|| (word[i] > 'Z' && word[i] < 'a')
+						|| (word[i] > 'z'))
+					{
+						word.erase(i, 1);
+						// decrease i so that the following character is checked also
+						// (has to be done because erase decreased the index numbers of all following characters by one)
+						i--;
+					}
+
+				}
+				if (word.size() > 0)
+					words.push_back(word);
+				pos = size + 1;
+				if (size > line.size()) break;
+			}
+		}
+		std::sort(words.begin(), words.end());
+		if (DEBUG)
 		{
-			cout << words.at(i) << endl;
+			for (int i = 0; i < words.size(); i++)
+			{
+				cout << words.at(i) << endl;
+			}
+		}
+		else
+		{
+			std::ofstream ofs;
+			ofs.open("merkkijono_abc.txt");
+			
+			if (ofs.is_open())
+			{
+				for (int i = 0; i < words.size(); i++)
+				{
+					ofs << words.at(i) << endl;
+				}
+			}
+			else
+				std::cerr << "Error: cannot open file" << endl;
 		}
 	}
 	else
-	{
-		// TODO: output to file
-	}
+		std::cerr << "Error: cannot open file" << endl;
 }
 void test_3()
 {
+	std::vector<std::string> words;
+	std::string line;
+	std::string word;
+	std::string::size_type pos, size;
+	std::ifstream ifs;
+	ifs.open("merkkijono.txt");
 
+	if (ifs.is_open())
+	{
+		// loop through all the lines in the file
+		while (std::getline(ifs, line)){
+			pos = 0;
+			// find the next empty space in the line
+			while (size = line.find(" ", pos))
+			{
+				// save the next word in a substring
+				word = line.substr(pos, size - pos);
+				// loop through the word to check in case of illegal characters
+				for (int i = 0; i < word.size(); i++)
+				{
+					if ((word[i] == '	')
+						|| (word[i] >= ' ' && word[i] <= '/')
+						|| (word[i] > '9' && word[i] < 'A')
+						|| (word[i] > 'Z' && word[i] < 'a')
+						|| (word[i] > 'z'))
+					{
+						word.erase(i, 1);
+						// decrease i so that the following character is checked also
+						// (has to be done because erase decreased the index numbers of all following characters by one)
+						i--;
+					}
+
+				}
+				if (word.size() > 2)
+					words.push_back(word);
+				pos = size + 1;
+				if (size > line.size()) break;
+			}
+		}
+		std::sort(words.begin(), words.end());
+		if (DEBUG)
+		{
+			for (int i = 0; i < words.size(); i++)
+			{
+				cout << words.at(i) << endl;
+			}
+		}
+		else
+		{
+			std::ofstream ofs;
+			ofs.open("merkkijono_abc.txt");
+
+			if (ofs.is_open())
+			{
+				for (int i = 0; i < words.size(); i++)
+				{
+					ofs << words.at(i) << endl;
+				}
+			}
+			else
+				std::cerr << "Error: cannot open file" << endl;
+		}
+	}
+	else
+		std::cerr << "Error: cannot open file" << endl;
 }
 void test_4()
 {
