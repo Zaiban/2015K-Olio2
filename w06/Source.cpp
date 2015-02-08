@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Painter.h"
 using std::cout; using std::cin; using std::endl;
 
 const bool DEBUG = false;
@@ -219,5 +220,51 @@ void test_3()
 }
 void test_4()
 {
+	std::vector<Painter*> painters;
+
+	char command[2];
+
+	cout << "(c) = create painter"
+		<< "\n(n) = count existing painter objects"
+		<< "\n(d) = destroy painter"
+		<< "\n(p) = print container"
+		<< "\n(q) = quit" << endl;
+
+	while (true)
+	{
+		cout << "Input: ";
+		cin.getline(command, 2);
+
+		switch (command[0]){
+		case 'c':
+			painters.push_back(Painter::Create( painters.size() ));
+			break;
+		case 'n':
+			cout << "Currently there are " << Painter::countPainters() << " living painter objects" << endl;
+			break;
+		case 'd':
+			for (int i = 0; i < painters.size() ; i++)
+			{
+				if (painters.at(i) != nullptr)
+				{
+					painters.at(i)->Destroy();
+					painters.at(i) = nullptr;
+					break;
+				}
+			}
+			break;
+		case 'p':
+			for (int i = 0; i < painters.size(); i++)
+			{
+				cout << "\npainters[" << i << "]: address=" << painters.at(i);
+				if (painters.at(i) != nullptr)
+					cout << " data=" << painters.at(i)->getData();
+			}
+			cout << endl;
+			break;
+		case 'q':
+			return;
+		};
+	}
 
 }
