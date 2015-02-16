@@ -11,7 +11,7 @@ int main()
 {
 	char command[2];
 
-	cout << "Type the number of the test program(1, 2) ";
+	cout << "Type the number of the test program(1, 2, 3, 4) ";
 	cin.getline(command, 2);
 
 	switch (command[0]){
