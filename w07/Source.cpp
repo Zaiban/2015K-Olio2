@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ #include "stdafx.h"
 #include "Deal.h"
 using std::cout; using std::cin; using std::endl;
 
@@ -56,5 +56,27 @@ void test_1()
 }
 void test_2()
 {
+	int count, sizeOfDeal = 100;
+	std::string remove;
+	std::vector<Deal> V;
+	std::vector<Deal>::const_iterator V_begin, V_end;
+	std::ifstream input;
+	input.open("nokia18032009.txt");
 
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(V));
+
+		V_begin = V.begin();
+		V_end = V.end();
+
+		Deal compare = Deal("", 0, sizeOfDeal, "", "");
+
+		count = std::count(V_begin, V_end, compare);
+		cout << "The file contains " << count << " deals that were size of " << sizeOfDeal << " units." << endl;
+
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }

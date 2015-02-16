@@ -27,8 +27,14 @@ std::istream &operator>>(std::istream &in, Deal &s)
 	return in;
 }
 
-bool Deal::operator<(const Deal &s) const
+bool Deal::operator<(const Deal &rhs) const
 {
-	if (mPrice < s.mPrice) return true;
+	if (mPrice < rhs.mPrice) return true;
+	else return false;
+}
+
+bool Deal::operator==(const Deal &rhs) const
+{
+	if (mQuantity == rhs.mQuantity) return true;
 	else return false;
 }
