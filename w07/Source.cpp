@@ -1,4 +1,4 @@
- #include "stdafx.h"
+#include "stdafx.h"
 #include "Deal.h"
 using std::cout; using std::cin; using std::endl;
 
@@ -11,7 +11,7 @@ int main()
 {
 	char command[2];
 
-	cout << "Type the number of the test program(1, 2, 3, 4) ";
+	cout << "Type the number of the test program(1, 2) ";
 	cin.getline(command, 2);
 
 	switch (command[0]){
