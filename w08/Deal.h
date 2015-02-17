@@ -16,6 +16,9 @@ public:
 	friend std::ostream &operator<<(std::ostream &out, const Deal &s);
 	friend std::istream &operator>>(std::istream &in, Deal &s);
 
+	double getPrice() const;
+	int getQuantity() const;
+
 private:
 	std::string mTime;
 	double mPrice;

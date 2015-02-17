@@ -71,6 +71,7 @@
   <ItemGroup>
     <ClInclude Include="Deal.h" />
     <ClInclude Include="IsLower.h" />
+    <ClInclude Include="SumDeals.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="nokia18032009.txt" />

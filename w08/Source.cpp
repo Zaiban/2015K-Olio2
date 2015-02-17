@@ -1,6 +1,7 @@
 #include "stdafx.h"
 #include "Deal.h"
 #include "IsLower.h"
+#include "SumDeals.h"
 using std::cout; using std::cin; using std::endl;
 
 const bool DEBUG = false;
@@ -80,7 +81,23 @@ void test_1()
 }
 void test_2()
 {
+	std::string remove;
+	std::vector<Deal> deals;
+	std::ifstream input;
+	input.open("nokia18032009.txt");
 
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(deals));
+
+		SumDeals sum = std::for_each(deals.begin(), deals.end(), SumDeals());
+
+		cout.precision(2);
+		cout << "The total sum for all deals is: " << std::fixed << sum.getSum() << endl;
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
 void test_3()
 {

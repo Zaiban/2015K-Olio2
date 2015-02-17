@@ -34,5 +34,8 @@
     <ClInclude Include="IsLower.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SumDeals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

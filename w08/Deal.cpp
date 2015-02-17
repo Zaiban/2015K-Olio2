@@ -68,3 +68,16 @@ std::istream &operator>>(std::istream &in, Deal &s)
 	in >> s.mTime >> s.mPrice >> s.mQuantity >> s.mBuyer >> s.mSeller;
 	return in;
 }
+
+
+double Deal::getPrice() const
+{
+	return mPrice;
+}
+
+
+
+int Deal::getQuantity() const
+{
+	return mQuantity;
+}
