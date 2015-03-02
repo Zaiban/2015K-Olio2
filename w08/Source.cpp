@@ -103,8 +103,7 @@ void test_3()
 {
 	std::string remove;
 	std::vector<Deal> deals;
-	std::vector<Deal>::iterator i, j, k;
-	std::vector<Deal> toprint;
+	std::vector<Deal>::const_iterator i, j;
 	std::ifstream input;
 	std::ofstream output;
 	input.open("nokia18032009.txt");
@@ -121,15 +120,17 @@ void test_3()
 		cin >> size;
 		i = deals.begin();
 		j = deals.end();
-		k = toprint.begin();
 		output.open("halututkaupat.txt");
 		if (output.is_open())
 		{
-			//auto loop_body = [size](Deal deal) {return std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")); };
-			std::transform(i, j, std::back_inserter(toprint), std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")) );
 
-			for (int i = 0; i < toprint.size(); i++)
-				cout << toprint.at(i) << endl;
+			while ((i = find_if(i, j, std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")))) != j)
+			{
+				cout << *i << endl;
+				i++;
+			}
+			cout << endl;
+			
 		}
 		else
 			std::cerr << "Error opening file for writing." << endl;
