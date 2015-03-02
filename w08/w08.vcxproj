@@ -67,10 +67,12 @@
   <ItemGroup>
     <ClCompile Include="Deal.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Deal.h" />
     <ClInclude Include="IsLower.h" />
+    <ClInclude Include="stdafx.h" />
     <ClInclude Include="SumDeals.h" />
   </ItemGroup>
   <ItemGroup>

@@ -27,13 +27,13 @@ int main()
 		test_2();
 		break;
 	case '3':
-		test_2();
+		test_3();
 		break;
 	case '4':
-		test_2();
+		test_4();
 		break;
 	case '5':
-		test_2();
+		test_5();
 		break;
 	};
 
@@ -101,7 +101,41 @@ void test_2()
 }
 void test_3()
 {
+	std::string remove;
+	std::vector<Deal> deals;
+	std::vector<Deal>::iterator i, j, k;
+	std::vector<Deal> toprint;
+	std::ifstream input;
+	std::ofstream output;
+	input.open("nokia18032009.txt");
 
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(deals));
+
+		sort(deals.begin(), deals.end());
+
+		int size;
+		cout << "Input size: ";
+		cin >> size;
+		i = deals.begin();
+		j = deals.end();
+		k = toprint.begin();
+		output.open("halututkaupat.txt");
+		if (output.is_open())
+		{
+			//auto loop_body = [size](Deal deal) {return std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")); };
+			std::transform(i, j, std::back_inserter(toprint), std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")) );
+
+			for (int i = 0; i < toprint.size(); i++)
+				cout << toprint.at(i) << endl;
+		}
+		else
+			std::cerr << "Error opening file for writing." << endl;
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
 void test_4()
 {
