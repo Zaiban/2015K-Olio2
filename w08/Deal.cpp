@@ -55,6 +55,19 @@ bool Deal::operator==(const Deal &rhs) const
 	else return false;
 }
 
+bool Deal::operator<=(const Deal &rhs) const
+{
+	if (mQuantity <= rhs.mQuantity) return true;
+	else return false;
+}
+
+bool Deal::operator>=(const Deal &rhs) const
+{
+	if (mQuantity >= rhs.mQuantity) return true;
+	else return false;
+}
+
+
 
 std::ostream &operator<<(std::ostream &out, const Deal &s)
 {

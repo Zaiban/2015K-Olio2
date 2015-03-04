@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Deal.h" />
+    <ClInclude Include="IsBetween.h" />
     <ClInclude Include="IsLower.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="SumDeals.h" />

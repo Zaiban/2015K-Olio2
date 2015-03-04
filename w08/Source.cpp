@@ -2,6 +2,7 @@
 #include "Deal.h"
 #include "IsLower.h"
 #include "SumDeals.h"
+#include "IsBetween.h"
 using std::cout; using std::cin; using std::endl;
 
 const bool DEBUG = false;
@@ -46,7 +47,7 @@ void test_1()
 {
 	std::string remove;
 	std::vector<Deal> deals;
-	std::vector<Deal>::const_iterator i, j;
+	std::vector<Deal>::iterator i, j;
 	std::ifstream input;
 	std::ofstream output;
 	input.open("nokia18032009.txt");
@@ -69,7 +70,10 @@ void test_1()
 		{
 			while ((i = std::find_if(i, j, IsLower<Deal>(limitD))) != deals.end())
 			{
-				output << *i << '\n';
+				if (DEBUG)
+					cout << *i << endl;
+				else
+					output << *i << endl;
 				++i;
 			}
 		}
@@ -103,7 +107,7 @@ void test_3()
 {
 	std::string remove;
 	std::vector<Deal> deals;
-	std::vector<Deal>::const_iterator i, j;
+	std::vector<Deal>::iterator i, j;
 	std::ifstream input;
 	std::ofstream output;
 	input.open("nokia18032009.txt");
@@ -126,7 +130,10 @@ void test_3()
 
 			while ((i = find_if(i, j, std::bind1st(std::equal_to<Deal>(), Deal("", 0, size, "", "")))) != j)
 			{
-				cout << *i << endl;
+				if (DEBUG)
+					cout << *i << endl;
+				else
+					output << *i << endl;
 				i++;
 			}
 			cout << endl;
@@ -140,9 +147,98 @@ void test_3()
 }
 void test_4()
 {
+	std::string remove;
+	std::vector<Deal> deals, temp;
+	std::vector<Deal>::iterator i, j;
+	std::ifstream input;
+	std::ofstream output;
+	input.open("nokia18032009.txt");
 
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(deals));
+
+		sort(deals.begin(), deals.end());
+
+		int lower, upper;
+		cout << "Input lower limit: ";
+		cin >> lower;
+		cout << "Input upper limit: ";
+		cin >> upper;
+		i = deals.begin();
+		j = deals.end();
+		output.open("kaupatvalilta.txt");
+		if (output.is_open())
+		{
+
+			while ((i = find_if(i, j, std::bind1st(std::less<Deal>(), Deal("", 0, lower, "", "")))) != j)
+			{
+				temp.push_back(*i);
+				i++;
+			}
+			i = temp.begin();
+			j = temp.end();
+			while ((i = find_if(i, j, std::bind2nd(std::less_equal<Deal>(), Deal("", 0, upper, "", "")))) != j)
+			{
+				if (DEBUG)
+					cout << *i << endl;
+				else
+					output << *i << endl;
+				i++;
+			}
+			cout << endl;
+
+		}
+		else
+			std::cerr << "Error opening file for writing." << endl;
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
 void test_5()
 {
+	std::string remove;
+	std::vector<Deal> deals;
+	std::vector<Deal>::iterator i, j;
+	std::ifstream input;
+	std::ofstream output;
+	input.open("nokia18032009.txt");
 
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(deals));
+
+		sort(deals.begin(), deals.end());
+
+		int lower, upper;
+		cout << "Input lower limit: ";
+		cin >> lower;
+		cout << "Input upper limit: ";
+		cin >> upper;
+		IsBetween<Deal> functor(Deal("", 0, lower, "", ""), Deal("", 0, upper, "", ""));
+		i = deals.begin();
+		j = deals.end();
+		output.open("kaupatvalilta.txt");
+		if (output.is_open())
+		{
+
+			while ((i = find_if(i, j, functor )) != j)
+			{
+				if (DEBUG)
+					cout << *i << endl;
+				else
+					output << *i << endl;
+				i++;
+			}
+
+			cout << endl;
+
+		}
+		else
+			std::cerr << "Error opening file for writing." << endl;
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }

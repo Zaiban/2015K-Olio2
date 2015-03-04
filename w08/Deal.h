@@ -12,6 +12,8 @@ public:
 	Deal& operator=(const Deal &);
 	bool operator<(const Deal& rhs) const;
 	bool operator==(const Deal& rhs) const;
+	bool operator<=(const Deal& rhs) const;
+	bool operator>=(const Deal& rhs) const;
 
 	friend std::ostream &operator<<(std::ostream &out, const Deal &s);
 	friend std::istream &operator>>(std::istream &in, Deal &s);
