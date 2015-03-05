@@ -56,7 +56,37 @@ void test_1()
 }
 void test_2()
 {
+	std::ifstream input;
+	std::string line, word; 
+	std::string::size_type wordStart, wordEnd;
+	std::multiset<std::string> stringSet;
+	std::multiset<std::string>::iterator wordPos;
+	input.open("textfile.txt");
 
+	if (input.is_open())
+	{
+		cout << "Reading text file 'textfile.txt'..\n" << endl;
+		while (std::getline(input, line))
+		{
+			wordEnd = wordStart = 0;
+			while( wordEnd < line.size())
+			{
+				wordEnd = line.find(' ', wordStart);
+				stringSet.insert(line.substr(wordStart, wordEnd - wordStart));
+				wordStart = line.find_first_not_of(' ', wordEnd);
+			}
+			
+		}
+
+		wordPos = stringSet.begin();
+		while (wordPos != stringSet.end())
+		{
+			cout << "Word '" << *wordPos << "' appears " << stringSet.count(*wordPos) << " times." << endl;
+			wordPos = stringSet.upper_bound(*wordPos);
+		}
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
 void test_3()
 {
