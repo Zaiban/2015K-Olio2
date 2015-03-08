@@ -90,7 +90,35 @@ void test_2()
 }
 void test_3()
 {
+	std::ifstream input;
+	std::string line, word;
+	std::string::size_type wordStart, wordEnd;
+	std::map<std::string, int> stringMap;
+	input.open("textfile.txt");
 
+	if (input.is_open())
+	{
+		cout << "Reading text file 'textfile.txt'..\n" << endl;
+		while (std::getline(input, line))
+		{
+			wordEnd = wordStart = 0;
+			while (wordEnd < line.size())
+			{
+				wordEnd = line.find(' ', wordStart);
+				auto resultPair = stringMap.insert(std::pair<std::string, int>(line.substr(wordStart, wordEnd - wordStart), 1));
+				if (resultPair.second == false)
+					resultPair.first->second++;
+				wordStart = line.find_first_not_of(' ', wordEnd);
+			}
+
+		}
+
+		std::for_each(stringMap.begin(), stringMap.end(), [](std::pair<std::string, int> pair){
+			cout << "Word'" << pair.first << "' appears " << pair.second << " times." << endl;
+		});
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
 void test_4()
 {
