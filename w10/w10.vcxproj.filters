@@ -21,14 +21,23 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Deal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Deal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="textfile.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="nokia18032009.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

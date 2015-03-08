@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Deal.h"
 
 using std::cout; using std::cin; using std::endl;
 
@@ -122,5 +123,45 @@ void test_3()
 }
 void test_4()
 {
+	std::string remove;
+	std::vector<Deal> V;
+	std::map < std::string, std::pair<int, double> > dealMap;
+	std::pair<int, double> quantityAndPrice;
+	std::ifstream input;
+	std::ofstream output;
+	std::string sellerName;
+	cout << "Please input seller name: ";
+	getline(cin, sellerName);
 
+	input.open("nokia18032009.txt");
+	if (input.is_open())
+	{
+		getline(input, remove);
+		copy(std::istream_iterator<Deal>(input), std::istream_iterator<Deal>(), back_inserter(V));
+
+		std::for_each(V.begin(), V.end(), [&](Deal deal){
+			quantityAndPrice.first = deal.getQuantity();
+			quantityAndPrice.second = deal.getPrice() * quantityAndPrice.first;
+			auto result = dealMap.insert(std::pair<std::string, std::pair<int, double>>(deal.getSeller(), quantityAndPrice));
+			if (result.second == false)
+			{
+				result.first->second.first += quantityAndPrice.first;
+				result.first->second.second += quantityAndPrice.second;
+			}
+		});
+
+		output.open("kaikki.txt");
+		if (output.is_open())
+		{
+			quantityAndPrice = dealMap.find(sellerName)->second;
+			cout << std::setiosflags(std::ios::fixed) << std::setprecision(2);
+			cout << "Seller " << sellerName << " has " << quantityAndPrice.first << " deals for a total value of " <<  quantityAndPrice.second << endl;
+			output << std::setiosflags(std::ios::fixed) << std::setprecision(2);
+			output << "Seller " << sellerName << " has " << quantityAndPrice.first << " deals for a total value of " << quantityAndPrice.second << endl;
+		}
+		else
+			std::cerr << "Error opening file for writing." << endl;
+	}
+	else
+		std::cerr << "Error opening file for reading." << endl;
 }
