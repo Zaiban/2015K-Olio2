@@ -1,16 +1,16 @@
-#ifndef INCLUDE_HH
+ï»¿#ifndef INCLUDE_HH
 #define INCLUDE_HH
 
 /**
  *	\version $Id: include.hh 1802 2011-02-07 09:17:58Z salone58 $
  *	\file include.hh
- *	\brief pääohjelman kirjastojen liittämistiedosto
- *	\author ©2011 Eero Salonen <eero.j.salonen@tut.fi>
+ *	\brief pï¿½ï¿½ohjelman kirjastojen liittï¿½mistiedosto
+ *	\author ï¿½2011 Eero Salonen <eero.j.salonen@tut.fi>
  */
 
 //Julkinen rajapinta
 #include "../../koordinaatti.hh"
-#include "../../pelirajapinta.hh"
+#include "../../InheritPelirajapinta.h"
 #include "../../nayttorajapinta.hh"
 #include "../../pelitehdas.hh"
 #include "../../vaittama.hh"
@@ -28,15 +28,15 @@
 
 //STL Kirjastot.
 /**
- *	Jos kääntäjä on GNUG pohjainen esim. gcc tai tutg++ käytetään tr1/memory
+ *	Jos kï¿½ï¿½ntï¿½jï¿½ on GNUG pohjainen esim. gcc tai tutg++ kï¿½ytetï¿½ï¿½n tr1/memory
  *	kirjastoa.
  */
 #	if defined(__GNUG__)
 
 #include <tr1/memory>
 /**
- *	Muussa tapauksessa käytetään memory kirjastoa ja toivotaan että kääntäjästä
- *	löytyy alustava tuki uudelle C++ standardille.
+ *	Muussa tapauksessa kï¿½ytetï¿½ï¿½n memory kirjastoa ja toivotaan ettï¿½ kï¿½ï¿½ntï¿½jï¿½stï¿½
+ *	lï¿½ytyy alustava tuki uudelle C++ standardille.
  *	Toimii esim. Visual Studio 2010.
  */
 #	else

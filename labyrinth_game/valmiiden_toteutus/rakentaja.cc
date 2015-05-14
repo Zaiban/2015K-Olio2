@@ -1,8 +1,8 @@
-/**
+Ôªø/**
  *	\version $Id: pelirajapinta.hh 1795 2011-02-01 07:31:30Z salone58 $
  *  \file rakentaja.cc
  *  \brief Rakentaa-luokan toteutus. ($Revision: 1795 $)
- *  \author ©2010 Eero Salonen <eero.j.salonen@tut.fi>
+ *  \author ÔøΩ2010 Eero Salonen <eero.j.salonen@tut.fi>
  */
 
 #include "include/rakentaja.hh"
@@ -44,7 +44,7 @@ void Rakentaja::lueTiedosto()
 	std::ifstream tiedostovirta(_tiedosto.c_str());
 	if(!tiedostovirta)
 	{
-		throw Julkinen::Alustusvirhe("Annettua alustus tiedostoa ei lˆytynyt");
+		throw Julkinen::Alustusvirhe("Annettua alustus tiedostoa ei l√∂ytynyt");
 	}
 
 	std::string komento = "";
@@ -93,7 +93,7 @@ void Rakentaja::lueTiedosto()
 	
 	if(_pelaajienmaara != _pelaajialisatty)
 	{
-		throw Julkinen::Alustusvirhe("Peliin lis‰ttyjen pelaajien m‰‰r‰ on eri kuin ilmoitettu pelaajien m‰‰r‰");
+		throw Julkinen::Alustusvirhe("Peliin lis√§ttyjen pelaajien m√§√§r√§ on eri kuin ilmoitettu pelaajien m√§√§r√§");
 	}
 	if(_siemenluku == 0)
 	{

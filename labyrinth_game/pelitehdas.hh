@@ -8,7 +8,7 @@
 *
 **/
 
-#include "pelirajapinta.hh"
+#include "InheritPelirajapinta.h"
 #include <memory>
 
 /// \namespace Julkinen
@@ -28,7 +28,7 @@ Julkinen
      *  \return Dynaamisesti luotu instanssi luokasta, joka toteuttaa
      *      Labyrintti-pelin.
      */
-   std::unique_ptr<Pelirajapinta> luoPeli();
+	std::unique_ptr<InheritPelirajapinta> luoPeli();
 }
 	
 #endif  // JULKINEN_PELITEHDAS_HH

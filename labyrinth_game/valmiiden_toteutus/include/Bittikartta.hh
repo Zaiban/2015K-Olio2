@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	\version $Id: Bittikartta.hh 1800 2011-02-05 06:54:47Z salone58 $
  *  \file  Bittikartta.hh
  *  \brief Labyrintti-pelin tulostuksen apuluokka ($Revision: 1800 $)

@@ -16,6 +16,12 @@
     <Filter Include="Header Files\include">
       <UniqueIdentifier>{0eeba714-9858-4dd4-8867-ac64e0f1c1a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\new">
+      <UniqueIdentifier>{953c2f32-9051-458d-890e-cbf9c83beca1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\new">
+      <UniqueIdentifier>{79404899-0293-41fd-b691-32095afbe490}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="valmiiden_toteutus\Alustaja.cc">
@@ -77,6 +83,12 @@
     </ClCompile>
     <ClCompile Include="valmiiden_toteutus\virhe.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="InheritPelirajapinta.cpp">
+      <Filter>Source Files\new</Filter>
+    </ClCompile>
+    <ClCompile Include="pelitehdas.cpp">
+      <Filter>Source Files\new</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -154,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="valmiiden_toteutus\include\vaittamavirhe.hh">
       <Filter>Header Files\include</Filter>
+    </ClInclude>
+    <ClInclude Include="InheritPelirajapinta.h">
+      <Filter>Header Files\new</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

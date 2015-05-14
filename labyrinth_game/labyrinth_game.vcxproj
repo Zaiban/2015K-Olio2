@@ -19,7 +19,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -64,6 +64,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InheritPelirajapinta.cpp" />
+    <ClCompile Include="pelitehdas.cpp" />
     <ClCompile Include="valmiiden_toteutus\Alustaja.cc" />
     <ClCompile Include="valmiiden_toteutus\alustusvirhe.cc" />
     <ClCompile Include="valmiiden_toteutus\Bittikartta.cc" />
@@ -88,6 +90,7 @@
   <ItemGroup>
     <ClInclude Include="alustusvirhe.hh" />
     <ClInclude Include="debug.hh" />
+    <ClInclude Include="InheritPelirajapinta.h" />
     <ClInclude Include="komentovirhe.hh" />
     <ClInclude Include="koordinaatti.hh" />
     <ClInclude Include="logiikkavirhe.hh" />

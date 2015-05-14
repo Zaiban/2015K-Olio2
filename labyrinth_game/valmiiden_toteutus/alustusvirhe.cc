@@ -1,9 +1,9 @@
-
+ï»¿
 /**
  *	\version $Id: alustusvirhe.cc 2677 2013-02-20 13:03:17Z voutilai $
  *  \file alustusvirhe.cc
  *  \brief Alustusvirhe-luokan toteutus. ($Revision: 2677 $)
- *  \author ©2010 Eero Salonen <eero.j.salonen@tut.fi>
+ *  \author ï¿½2010 Eero Salonen <eero.j.salonen@tut.fi>
  */
 
 #include "../alustusvirhe.hh"
@@ -15,7 +15,7 @@
 #include <map>
 using std::map;
 
-// Using-lauseet otsikkotiedostossa käytteen otetuille asioille.
+// Using-lauseet otsikkotiedostossa kï¿½ytteen otetuille asioille.
 using std::basic_ostream;
 using std::string;
 

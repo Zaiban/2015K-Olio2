@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	\version $Id: pala.hh 1797 2011-02-03 01:56:31Z salone58 $
  *  \file vaittamavirhe.cc
  *  \brief Julkinen::Vaittamavirhe-luokan toteutus.

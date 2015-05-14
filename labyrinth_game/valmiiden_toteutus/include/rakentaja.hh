@@ -1,4 +1,4 @@
-#ifndef RAKENTAJA_HH
+﻿#ifndef RAKENTAJA_HH
 #define RAKENTAJA_HH
 
 /**

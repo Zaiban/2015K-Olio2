@@ -1,8 +1,8 @@
-/**
+﻿/**
  *	\version $Id: labyrintti.cc 1802 2011-02-07 09:17:58Z salone58 $
  *  \file labyrintti.cc
- *  \brief Labyrintti pelin pääohjelma ($Revision: 1802 $)
- *  \author ©2011 Eero Salonen <eero.j.salonen@tut.fi>
+ *  \brief Labyrintti pelin pﾃ､ﾃ､ohjelma ($Revision: 1802 $)
+ *  \author ﾂｩ2011 Eero Salonen <eero.j.salonen@tut.fi>
  */
 
 #include "include/include.hh"
@@ -13,21 +13,21 @@ std::string lueArgumentit(std::deque<std::string> parametrit);
 /**
  * \brief Globaali debug-lippu
  *
- * Pääohjelma asettaa tämän lipun, jos ohjelma on käynnistetty debug-optiolla
+ * Pﾃ､ﾃ､ohjelma asettaa tﾃ､mﾃ､n lipun, jos ohjelma on kﾃ､ynnistetty debug-optiolla
  */
 bool debug_output = false;
 
 bool debug_naytto = false;
 
 /**
- *	\brief Labyrintti-pelin pääohjelma.
+ *	\brief Labyrintti-pelin pﾃ､ﾃ､ohjelma.
  *
- *	Käyttöjärjestelmä kutsuu tätä funktiota ja käynnistää labyrintti-pelin.
+ *	Kﾃ､yttﾃｶjﾃ､rjestelmﾃ､ kutsuu tﾃ､tﾃ､ funktiota ja kﾃ､ynnistﾃ､ﾃ､ labyrintti-pelin.
  *
- *	\param argc komentorivi argumenttien määrä.
+ *	\param argc komentorivi argumenttien mﾃ､ﾃ､rﾃ､.
  *	\param argv komentorivi argumentit.
  *
- *	\return Tiedon onnistuiko ohjelman suoritus vai epäonnistuiko se.
+ *	\return Tiedon onnistuiko ohjelman suoritus vai epﾃ､onnistuiko se.
  */
 int main(int argc, char** argv)
 {
@@ -47,7 +47,7 @@ int main(int argc, char** argv)
 		//Jos debug tilassa heitetään virhe eteenpäin
 		if(debug_output)
 		{ 
-			DEBUG_OUTPUT(std::cerr << virhe << std::endl);
+			DEBUG_OUTPUT(virhe << std::endl);
 			throw;
 		}
 		else
@@ -60,15 +60,14 @@ int main(int argc, char** argv)
 		//Jos debug tilassa heitetään virhe eteenpäin
 		if(debug_output)
 		{ 
-			DEBUG_OUTPUT(std::cerr
-				<< "VIRHE: Parametrien lukeminen ep�onnistui"
+			DEBUG_OUTPUT("VIRHE: Parametrien lukeminen epännistui"
 				<< std::endl;);
 			throw;
 		}
 		else
 		{
 			std::cerr
-				<< "VIRHE: Parametrien lukeminen ep�onnistui"
+				<< "VIRHE: Parametrien lukeminen epännistui"
 				<< std::endl;
 			return EXIT_FAILURE;
 		}
@@ -77,12 +76,12 @@ int main(int argc, char** argv)
 	try
 	{
 		Julkinen::Koordinaatti koko(5,5);
-		//Luodaan osoitin n�ytt��nn.
+		//Luodaan osoitin n艙ttnn.
 		std::shared_ptr<Naytto> naytto(
 			new Naytto(koko , 25, 20, debug_naytto));
 		//Luodaan osoitin peliin
 		
-           std::shared_ptr<Julkinen::Pelirajapinta> peli(Julkinen::luoPeli());
+           std::shared_ptr<Julkinen::InheritPelirajapinta> peli(Julkinen::luoPeli());
 		
 		peli->lisaaNaytto(naytto.get());
 		//Luodaan osoitin rakentajaan
@@ -109,10 +108,10 @@ int main(int argc, char** argv)
 		}
 		catch(Julkinen::Virhe virhe)
 		{
-			//Jos debug tilassa heitetään virhe eteenpäin
+			//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpﾃ､in
 			if(debug_output)
 			{ 
-				DEBUG_OUTPUT(std::cerr << virhe << std::endl);
+				DEBUG_OUTPUT(virhe << std::endl);
 				throw;
 			}
 			else
@@ -123,10 +122,10 @@ int main(int argc, char** argv)
 		}
 		catch(...)
 		{
-			//Jos debug tilassa heitetään virhe eteenpäin
+			//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpäin
 			if(debug_output)
 			{ 
-				DEBUG_OUTPUT(std::cerr << "VIRHE: Alustus epaonnistui" << std::endl);
+				DEBUG_OUTPUT("VIRHE: Alustus epaonnistui" << std::endl);
 				throw;
 			}
 			else
@@ -141,16 +140,16 @@ int main(int argc, char** argv)
 			//Luodaan komentotulkki osoitin
 			std::shared_ptr<Komentotulkki> komentotulkki(
 				Komentotulkki::uusiKomentotulkki(naytto));
-			//Käynnistetään komentotulkki
+			//Kﾃ､ynnistetﾃ､ﾃ､n komentotulkki
 			komentotulkki->kaynnistaKomentotulkki(peli);
 
 		}
 		catch(Julkinen::Virhe virhe)
 		{
-			//Jos debug tilassa heitetään virhe eteenpäin
+			//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpﾃ､in
 			if(debug_output)
 			{ 
-				DEBUG_OUTPUT(std::cerr << virhe << std::endl);
+				DEBUG_OUTPUT(virhe << std::endl);
 				throw;
 			}
 			else
@@ -161,10 +160,10 @@ int main(int argc, char** argv)
 		}
 		catch(...)
 		{
-			//Jos debug tilassa heitetään virhe eteenpäin
+			//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpﾃ､in
 			if(debug_output)
 			{ 
-				DEBUG_OUTPUT(std::cerr << "VIRHE: Kaynnistys epaonnistui" << std::endl);
+				DEBUG_OUTPUT("VIRHE: Kaynnistys epaonnistui" << std::endl);
 				throw;
 			}
 			else
@@ -177,10 +176,10 @@ int main(int argc, char** argv)
 	}
 	catch(Julkinen::Virhe virhe)
 	{
-		//Jos debug tilassa heitetään virhe eteenpäin
+		//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpﾃ､in
 		if(debug_output)
 		{ 
-			DEBUG_OUTPUT(std::cerr << virhe << std::endl);
+			DEBUG_OUTPUT(virhe << std::endl);
 			throw;
 		}
 		else
@@ -192,10 +191,10 @@ int main(int argc, char** argv)
 	
 	catch(...)
 	{
-		//Jos debug tilassa heitetään virhe eteenpäin
+		//Jos debug tilassa heitetﾃ､ﾃ､n virhe eteenpﾃ､in
 		if(debug_output)
 		{ 
-			DEBUG_OUTPUT(std::cerr << "VIRHE: Tuntematon virhe" << std::endl);
+			DEBUG_OUTPUT("VIRHE: Tuntematon virhe" << std::endl);
 			throw;
 		}
 		else
@@ -211,9 +210,9 @@ int main(int argc, char** argv)
 
 std::string lueArgumentit(std::deque<std::string> parametrit)
 {
-   //Apumuuttuja alustustiedoston nime� varten
+   //Apumuuttuja alustustiedoston nime・varten
    std::string palaute;
-   //K�yd��nn parametrit l�pi
+   //Käydään parametrit läpi
    for(unsigned int i = 1; i < parametrit.size(); i++)
    {
       //Jos parametrina -d laitetaan ohjelma debug tilaan.
@@ -232,7 +231,7 @@ std::string lueArgumentit(std::deque<std::string> parametrit)
       }
    }
    
-   // Jos liikaa parametreja niin heitet��n poikkeus.
+   // Jos liikaa parametreja niin heitetään poikkeus.
    if(parametrit.size() > MAX_PARAMETREJA)
    {
       throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHE_LIIKAA_PARAMETREJA);

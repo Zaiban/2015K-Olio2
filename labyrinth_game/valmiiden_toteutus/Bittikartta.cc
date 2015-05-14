@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	\version $Id: Bittikartta.cc 1800 2011-02-05 06:54:47Z salone58 $
  *  \file  Bittikartta.cc
  *  \brief Bittikartta-luokan toteutus ($Revision: 1800 $)

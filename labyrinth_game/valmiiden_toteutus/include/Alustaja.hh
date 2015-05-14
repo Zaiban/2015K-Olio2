@@ -1,4 +1,4 @@
-/**
+﻿/**
  *	\version $Id: Alustaja.hh 1800 2011-02-05 06:54:47Z salone58 $
  *  \file  Alustaja.hh
  *  \brief Labyrintti-pelin alustuksen apuluokka ($Revision: 1800 $)

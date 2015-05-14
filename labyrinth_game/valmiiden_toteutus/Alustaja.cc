@@ -1,8 +1,8 @@
-/**
+Ôªø/**
  *	\version $Id: Alustaja.cc 1800 2011-02-05 06:54:47Z salone58 $
  *  \file  Alustaja.cc
  *  \brief Alustaja-luokan toteutus($Revision: 1800 $)
- *  \author ©2010 Eero Salonen <eero.j.salonen@tut.fi>
+ *  \author ÔΩ©2010 Eero Salonen <eero.j.salonen@tut.fi>
  */
 
 #include "include/Alustaja.hh"
@@ -16,7 +16,7 @@
 
 //STL Kirjastot.
 /**
- *	Jos k‰‰nt‰j‰ on GNUG pohjainen esim. gcc tai tutg++ esitell‰‰n
+ *	Jos kËíøntËáª„Éªon GNUG pohjainen esim. gcc tai tutg++ esitellËíøn
  *  luokkavakiot.
  */
 #	if defined(__GNUG__)
@@ -139,7 +139,7 @@ void Alustaja::arvoAlkutilanne()
   irtopala_ = *iter;
   ruudut.erase(iter);
 
-  // arvotaan ruutujen j‰rjestys ja joka ruudulle rotaatio
+  // arvotaan ruutujen jËàêjestys ja joka ruudulle rotaatio
 
   for(int i = 24; i >= 0; i--) {
     unsigned long int ruutuNro = arvo(static_cast<unsigned int>(i));
@@ -198,7 +198,7 @@ void Alustaja::arvoAlkutilanne()
      labyrintinErikoispalat[ruutuun] = esine;
   }
 
-  // arvotaan jokaiselle pelaajalle lista etsitt‰vist‰ esineist‰
+  // arvotaan jokaiselle pelaajalle lista etsittËà∏ist„Éªesineist„Éª
 
   unsigned int pelaajalleEsineita = 12 / pelaajia_;
   std::vector<char> esineet;
@@ -235,7 +235,7 @@ unsigned long int Alustaja::arvo(unsigned long int raja)
 
   do { raakaluku = raakaArvo(); } while (raakaluku > raakaraja);
 
-  // Palautetaan tulos skaalattuna v‰lille 0 .. raja
+  // Palautetaan tulos skaalattuna vËàÅille 0 .. raja
   unsigned long int luku = raakaluku / (raakaraja/(raja+1) + 1);
   assert(luku <= raja);
 
