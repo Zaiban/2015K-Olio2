@@ -10,7 +10,6 @@
 
 //Julkinen rajapinta
 #include "../../koordinaatti.hh"
-#include "../../InheritPelirajapinta.h"
 #include "../../nayttorajapinta.hh"
 #include "../../pelitehdas.hh"
 #include "../../vaittama.hh"

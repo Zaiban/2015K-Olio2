@@ -84,10 +84,10 @@
     <ClCompile Include="valmiiden_toteutus\virhe.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="InheritPelirajapinta.cpp">
+    <ClCompile Include="pelitehdas.cpp">
       <Filter>Source Files\new</Filter>
     </ClCompile>
-    <ClCompile Include="pelitehdas.cpp">
+    <ClCompile Include="Game.cpp">
       <Filter>Source Files\new</Filter>
     </ClCompile>
   </ItemGroup>
@@ -167,7 +167,7 @@
     <ClInclude Include="valmiiden_toteutus\include\vaittamavirhe.hh">
       <Filter>Header Files\include</Filter>
     </ClInclude>
-    <ClInclude Include="InheritPelirajapinta.h">
+    <ClInclude Include="Game.h">
       <Filter>Header Files\new</Filter>
     </ClInclude>
   </ItemGroup>

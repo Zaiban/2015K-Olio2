@@ -64,7 +64,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="InheritPelirajapinta.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="pelitehdas.cpp" />
     <ClCompile Include="valmiiden_toteutus\Alustaja.cc" />
     <ClCompile Include="valmiiden_toteutus\alustusvirhe.cc" />
@@ -90,7 +90,7 @@
   <ItemGroup>
     <ClInclude Include="alustusvirhe.hh" />
     <ClInclude Include="debug.hh" />
-    <ClInclude Include="InheritPelirajapinta.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="komentovirhe.hh" />
     <ClInclude Include="koordinaatti.hh" />
     <ClInclude Include="logiikkavirhe.hh" />

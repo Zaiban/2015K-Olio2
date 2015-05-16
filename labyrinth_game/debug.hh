@@ -27,6 +27,6 @@ extern bool debug_output; // Globaali muuttuja, hyi!
      *  \post Jos ohjelma on käännetty debug-tilassa, tulostus tulostuu
      *    ruudulle. Muussa tapauksessa mitään ei tapahdu.
      */
-#define DEBUG_OUTPUT(stuff) if (debug_output) { std::cerr << stuff ; }
+#define DEBUG_OUTPUT(stuff) if (debug_output) { std::cerr << stuff; }
 
 #endif  // JULKINEN_DEBUG_HH

@@ -34,7 +34,7 @@ int main(int argc, char** argv)
 	std::string tiedosto = "";
 	std::deque<std::string> parametrit(argv, argv + argc);
 
-
+	DEBUG_OUTPUT(argv << std::endl;);
 
    //Luetaan parametrit
 	try
@@ -81,12 +81,12 @@ int main(int argc, char** argv)
 			new Naytto(koko , 25, 20, debug_naytto));
 		//Luodaan osoitin peliin
 		
-           std::shared_ptr<Julkinen::InheritPelirajapinta> peli(Julkinen::luoPeli());
+        std::shared_ptr<Game> peli(Julkinen::luoPeli());
 		
 		peli->lisaaNaytto(naytto.get());
 		//Luodaan osoitin rakentajaan
 
-           Rakentaja rakentaja(peli, koko,
+        Rakentaja rakentaja(peli, koko,
                              tiedosto, naytto);
            
 		//Alustetaan peli

@@ -5,19 +5,19 @@
  *	\version $Id: pelirajapinta.hh 1795 2011-02-01 07:31:30Z salone58 $
  *  \file rakentaja.hh
  *  \brief Rakentaja-luokan esittely. ($Revision: 1795 $)
- *  \author ©2010 Eero Salonen <eero.j.salonen@tut.fi> 
+ *  \author ï¿½2010 Eero Salonen <eero.j.salonen@tut.fi> 
  */
 
 /**
- *	Jos kääntäjä on GNUG pohjainen esim. gcc tai tutg++ käytetään tr1/memory
+ *	Jos kï¿½ï¿½ntï¿½jï¿½ on GNUG pohjainen esim. gcc tai tutg++ kï¿½ytetï¿½ï¿½n tr1/memory
  *	kirjastoa.
  */
 #	if defined(__GNUG__)
 
 #include <tr1/memory>
 /**
- *	Muussa tapauksessa käytetään memory kirjastoa ja toivotaan että kääntäjästä
- *	löytyy alustava tuki uudelle C++ standardille. 
+ *	Muussa tapauksessa kï¿½ytetï¿½ï¿½n memory kirjastoa ja toivotaan ettï¿½ kï¿½ï¿½ntï¿½jï¿½stï¿½
+ *	lï¿½ytyy alustava tuki uudelle C++ standardille. 
  *	Toimii esim. Visual Studio 2010.
  */
 #	else
@@ -41,7 +41,7 @@ class Rakentaja
 		 *
 		 *	\param peli Osoitin pelirajapintaan.
 		 *	\param alustaja Osoitin \c Alustaja -olioon.
-		 *	\param pelialueenkoko Koordinaatti joka sisältää pelialueen koon.
+		 *	\param pelialueenkoko Koordinaatti joka sisï¿½ltï¿½ï¿½ pelialueen koon.
 		 *	\param naytto Osoite tulostusrajapintaan.
 		 */
 		Rakentaja(std::shared_ptr<Julkinen::Pelirajapinta> peli,  
@@ -62,17 +62,17 @@ class Rakentaja
 		void lueTiedosto(); 
 
 		/**
-		 *	\brief Metodi joka lisää palat peliin.
+		 *	\brief Metodi joka lisï¿½ï¿½ palat peliin.
 		 *
-		 *	\post Palat on lisätty peliin.
+		 *	\post Palat on lisï¿½tty peliin.
 		 *		Poikkeusturvallisuus: Perustakuu.
 		 */
 		void lisaaPalat();
 
 		/**
-		 *	\brief Metodi joka lisää ensimmäisen irtopalan peliin.
+		 *	\brief Metodi joka lisï¿½ï¿½ ensimmï¿½isen irtopalan peliin.
 		 *
-		 *	\post Irtopala on lisätty peliin.
+		 *	\post Irtopala on lisï¿½tty peliin.
 		 *		Poikkeusturvallisuus: Perustakuu.
 		 */
 		void lisaaIrtopala();
@@ -81,25 +81,25 @@ class Rakentaja
 		 *	\brief funktio joka luo pelaajat peliin, 
 		 *	jos alustustiedostoa ei ole annettu.
 		 *
-		 *	\post Pelaajat lisätty peliin
+		 *	\post Pelaajat lisï¿½tty peliin
 		 *		Poikkeusturvallisuus: Perustakuu.
 		 *
-		 *	\param ihmispelaajia Ihmispelaajien määrä.
-		 *	\param tietokonepelaajia Tietokonepelaajien määrä.
+		 *	\param ihmispelaajia Ihmispelaajien mï¿½ï¿½rï¿½.
+		 *	\param tietokonepelaajia Tietokonepelaajien mï¿½ï¿½rï¿½.
 		 */
 		void luoPelaajat();
 
 		/**
 		 *	\brief Metodi joka lisaa pelaajat peliin.
 		 *
-		 *	\post Pelaajat on lisätty peliin.
+		 *	\post Pelaajat on lisï¿½tty peliin.
 		 */
 		void lisaaPelaajat();
 
 		/**
 		 *	\brief Metodi joka lisaa esineet peliin.
 		 *
-		 *	\post Esineet on lisätty peliin.
+		 *	\post Esineet on lisï¿½tty peliin.
 		 */
 		void lisaaEsineet();
 
