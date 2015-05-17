@@ -2,24 +2,16 @@
 #include <memory>
 #include <map>
 #include <algorithm>
+#include <climits>
 #include "pelirajapinta.hh"
 #include "koordinaatti.hh"
 #include "toimintovirhe.hh"
+#include "komentovirhe.hh"
 #include "valmiiden_toteutus\include\naytto.hh"
 
-struct Player{
-	Julkinen::PelaajaTyyppi type;
-	std::string name;
-	char abbr;
-	Julkinen::Koordinaatti location;
-	// Constructor
-	Player(Julkinen::PelaajaTyyppi type, std::string name, char abbr, Julkinen::Koordinaatti location) :
-		type(type), name(name), abbr(abbr), location(location){};
-};
-
-// pieceTypeRotation is a pair that contains the type of the piece and its rotation
-typedef std::pair<Julkinen::PalaTyyppi, unsigned int> pieceTypeRotation;
-
+#include "Player.h"
+#include "Piece.h"
+#include "Item.h"
 
 class Game :
 	public Julkinen::Pelirajapinta
@@ -55,7 +47,8 @@ private:
 	Naytto* mScreen;
 	unsigned mAreaSize;
 	std::vector<Player> mPlayers;
-	std::map < Julkinen::Koordinaatti,  pieceTypeRotation> mPieces;
+	std::map <Julkinen::Koordinaatti, Piece> mPieces;
+	std::map <Julkinen::Koordinaatti, Item> mItems;
 	int mActivePlayer;
 };
 

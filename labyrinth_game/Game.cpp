@@ -35,11 +35,12 @@ void Game::lisaaPelaaja(Julkinen::PelaajaTyyppi tyyppi, std::string const& nimi,
 void Game::lisaaPala(Julkinen::PalaTyyppi pala, unsigned int rotaatio, Julkinen::Koordinaatti const& sijainti){
 	DEBUG_OUTPUT("lisaaPala()" << std::endl);
 	// TO-DO: ehdot
-	mPieces.insert(std::pair<Julkinen::Koordinaatti, pieceTypeRotation>(sijainti, pieceTypeRotation(pala, rotaatio)));
+	mPieces.insert(std::pair<Julkinen::Koordinaatti, Piece>(sijainti, Piece(pala, rotaatio)));
 }
 void Game::lisaaEsine(char merkki, Julkinen::Koordinaatti const& sijainti, std::string const& pelaaja){
 	DEBUG_OUTPUT("lisaaEsine()" << std::endl);
-	mScreen->esineLaudalle(merkki, sijainti);
+	
+	mItems.insert(std::pair<Julkinen::Koordinaatti, Item>(sijainti, Item(merkki, pelaaja)));
 }
 void Game::asetaPalanTyyppi(Julkinen::ErikoispalaTyyppi tyyppi, Julkinen::Koordinaatti const& sijainti, Julkinen::Koordinaatti const& kohde){
 	DEBUG_OUTPUT("asetaPalanTyyppi()" << std::endl);
@@ -51,7 +52,7 @@ void Game::alustusLopeta(){
 	updateScreen();
 	mScreen->komentoLopetaRakennus();
 	mInitialization = false;
-
+	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
 }
 bool Game::onkoPelitilassa() const{
 	return !mInitialization;
@@ -71,6 +72,21 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 	DEBUG_OUTPUT("komentoLiiku()" << std::endl);
 	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 67, "vaihdaVuoro");
 
+	// Check for negative input.
+	// Because its unsigned, negative input means larger than max/2
+	if (maara > ULONG_MAX / 2){
+		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_TUNNISTAMATON_PARAMETRI).tulosta(std::cout);
+		std::cout << std::endl; 
+		return;
+	}
+
+
+	if (maara == 0 && suunta != Julkinen::Suunta::PAIKALLAAN){
+		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_TUNNISTAMATON_PARAMETRI).tulosta(std::cout);
+		std::cout << std::endl;
+		return;
+	}
+
 	// Check in case of wall collision
 	if (isWallCollision(suunta, maara)){
 		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_EI_VOITU_LIIKKUA_ANNETTUA_MAARAA).tulosta(std::cout);
@@ -78,8 +94,8 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 	}
 
 	// Move the player
-	int x = mPlayers.at(mActivePlayer).location.haeXkoordinaatti();
-	int y = mPlayers.at(mActivePlayer).location.haeYkoordinaatti();
+	int x = mPlayers.at(mActivePlayer).getLocation().haeXkoordinaatti();
+	int y = mPlayers.at(mActivePlayer).getLocation().haeYkoordinaatti();
 	switch (suunta){
 	case Julkinen::ALAS:
 		y += maara;
@@ -97,7 +113,7 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 		handleCPU();
 		break;
 	}
-	mPlayers.at(mActivePlayer).location = Julkinen::Koordinaatti(x, y);
+	mPlayers.at(mActivePlayer).setLocation(Julkinen::Koordinaatti(x, y));
 }
 bool Game::vaihdaVuoro(){
 	DEBUG_OUTPUT("vaihdaVuoro()" << std::endl);
@@ -110,36 +126,39 @@ bool Game::vaihdaVuoro(){
 	mScreen->komentoLopetaRakennus();
 	mInitialization = false;
 
-	if (mActivePlayer == mPlayers.size()-1 )
+	if (mActivePlayer == mPlayers.size() - 1)
 		mActivePlayer = 0;
 	else
 		mActivePlayer++;
 	DEBUG_OUTPUT("Active Player:" << mActivePlayer << std::endl);
 
+	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
 	return true;
 }
 Julkinen::PelaajaTyyppi Game::haeVuorossa(){
-	DEBUG_OUTPUT("haeVuorossa()" << std::endl);
-	return mPlayers.at(mActivePlayer).type;
+	return mPlayers.at(mActivePlayer).getType();
 }
 
 void Game::updateScreen(){
 
-	std::for_each(mPieces.begin(), mPieces.end(), [&](std::pair<Julkinen::Koordinaatti, pieceTypeRotation> mapItem){
-		mScreen->palaLaudalle(mapItem.second.first, Julkinen::ErikoispalaTyyppi(), mapItem.second.second, mapItem.first, Julkinen::Koordinaatti());
+	std::for_each(mPieces.begin(), mPieces.end(), [&](std::pair<Julkinen::Koordinaatti, Piece> mapItem){
+		mScreen->palaLaudalle(mapItem.second.getType(), Julkinen::ErikoispalaTyyppi(), mapItem.second.getRotation(), mapItem.first, Julkinen::Koordinaatti());
 	});
 	std::for_each(mPlayers.begin(), mPlayers.end(), [&](Player player){
-		mScreen->pelaajaLaudalle(player.abbr, player.location);
+		mScreen->pelaajaLaudalle(player.getAbbr(), player.getLocation());
+	});
+	std::for_each(mItems.begin(), mItems.end(), [&](std::pair<Julkinen::Koordinaatti, Item> mapItem){
+		mScreen->esineLaudalle(mapItem.second.getSign(), mapItem.first);
 	});
 	std::for_each(mPlayers.begin(), mPlayers.end(), [&](Player player){
-		mScreen->tulostaPelaajantiedot(player.name, "keratytesineet", "kerattavatesineet", "edellinentoiminto");
+		mScreen->tulostaPelaajantiedot(player.getName(), "keratytesineet", "kerattavatesineet", "edellinentoiminto");
 	});
 }
 bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
-	 int x = mPlayers.at(mActivePlayer).location.haeXkoordinaatti();
-	 int y = mPlayers.at(mActivePlayer).location.haeYkoordinaatti();
+	int x = mPlayers.at(mActivePlayer).getLocation().haeXkoordinaatti();
+	int y = mPlayers.at(mActivePlayer).getLocation().haeYkoordinaatti();
 
-	
+
 
 	switch (direction){
 	case Julkinen::ALAS:
@@ -147,8 +166,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 		if ((y + amount) > mAreaSize) return true;
 		// check for collision
 		for (int i = 0; i < amount; i++){
-			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).first;
-			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).second;
+			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).getType();
+			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).getRotation();
 			if ((startType == Julkinen::IPALA && startRotation == 2)
 				|| (startType == Julkinen::IPALA && startRotation == 4)
 				|| (startType == Julkinen::LPALA && startRotation == 1)
@@ -156,8 +175,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 				|| (startType == Julkinen::TPALA && startRotation == 3)
 				) return true;
 
-			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x, y + 1)).first;
-			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x, y + 1)).second;
+			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x, y + 1)).getType();
+			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x, y + 1)).getRotation();
 			if ((destType == Julkinen::IPALA && destRotation == 2)
 				|| (destType == Julkinen::IPALA && destRotation == 4)
 				|| (destType == Julkinen::LPALA && destRotation == 2)
@@ -172,8 +191,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 		if ((y - amount) < 1) return true;
 		// check for collision
 		for (int i = 0; i < amount; i++){
-			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).first;
-			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).second;
+			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).getType();
+			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).getRotation();
 			if ((startType == Julkinen::IPALA && startRotation == 2)
 				|| (startType == Julkinen::IPALA && startRotation == 4)
 				|| (startType == Julkinen::LPALA && startRotation == 3)
@@ -181,8 +200,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 				|| (startType == Julkinen::TPALA && startRotation == 1)
 				) return true;
 
-			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x, y - 1)).first;
-			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x, y - 1)).second;
+			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x, y - 1)).getType();
+			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x, y - 1)).getRotation();
 			if ((destType == Julkinen::IPALA && destRotation == 2)
 				|| (destType == Julkinen::IPALA && destRotation == 4)
 				|| (destType == Julkinen::LPALA && destRotation == 1)
@@ -197,8 +216,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 		if ((x + amount) > mAreaSize) return true;
 		// check for collision
 		for (int i = 0; i < amount; i++){
-			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).first;
-			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).second;
+			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).getType();
+			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).getRotation();
 			if ((startType == Julkinen::IPALA && startRotation == 1)
 				|| (startType == Julkinen::IPALA && startRotation == 3)
 				|| (startType == Julkinen::LPALA && startRotation == 3)
@@ -206,8 +225,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 				|| (startType == Julkinen::TPALA && startRotation == 2)
 				) return true;
 
-			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x + 1, y)).first;
-			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x + 1, y)).second;
+			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x + 1, y)).getType();
+			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x + 1, y)).getRotation();
 			if ((destType == Julkinen::IPALA && destRotation == 1)
 				|| (destType == Julkinen::IPALA && destRotation == 3)
 				|| (destType == Julkinen::LPALA && destRotation == 1)
@@ -222,8 +241,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 		if ((x - amount) < 1) return true;
 		// check for collision
 		for (int i = 0; i < amount; i++){
-			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).first;
-			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).second;
+			Julkinen::PalaTyyppi startType = mPieces.at(Julkinen::Koordinaatti(x, y)).getType();
+			unsigned int startRotation = mPieces.at(Julkinen::Koordinaatti(x, y)).getRotation();
 			if ((startType == Julkinen::IPALA && startRotation == 1)
 				|| (startType == Julkinen::IPALA && startRotation == 3)
 				|| (startType == Julkinen::LPALA && startRotation == 1)
@@ -231,8 +250,8 @@ bool Game::isWallCollision(Julkinen::Suunta direction, unsigned int amount){
 				|| (startType == Julkinen::TPALA && startRotation == 4)
 				) return true;
 
-			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x - 1, y)).first;
-			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x - 1, y)).second;
+			Julkinen::PalaTyyppi destType = mPieces.at(Julkinen::Koordinaatti(x - 1, y)).getType();
+			unsigned int destRotation = mPieces.at(Julkinen::Koordinaatti(x - 1, y)).getRotation();
 			if ((destType == Julkinen::IPALA && destRotation == 1)
 				|| (destType == Julkinen::IPALA && destRotation == 3)
 				|| (destType == Julkinen::LPALA && destRotation == 3)

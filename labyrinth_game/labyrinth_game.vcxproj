@@ -65,7 +65,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="Item.cpp" />
     <ClCompile Include="pelitehdas.cpp" />
+    <ClCompile Include="Piece.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="valmiiden_toteutus\Alustaja.cc" />
     <ClCompile Include="valmiiden_toteutus\alustusvirhe.cc" />
     <ClCompile Include="valmiiden_toteutus\Bittikartta.cc" />
@@ -91,6 +94,7 @@
     <ClInclude Include="alustusvirhe.hh" />
     <ClInclude Include="debug.hh" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Item.h" />
     <ClInclude Include="komentovirhe.hh" />
     <ClInclude Include="koordinaatti.hh" />
     <ClInclude Include="logiikkavirhe.hh" />
@@ -99,6 +103,8 @@
     <ClInclude Include="nayttovirhe.hh" />
     <ClInclude Include="pelirajapinta.hh" />
     <ClInclude Include="pelitehdas.hh" />
+    <ClInclude Include="Piece.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="toimintovirhe.hh" />
     <ClInclude Include="toteuttamaton_virhe.hh" />
     <ClInclude Include="vaittama.hh" />
