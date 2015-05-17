@@ -3,6 +3,7 @@
 #include <map>
 #include <algorithm>
 #include <climits>
+#include <iterator>
 #include "pelirajapinta.hh"
 #include "koordinaatti.hh"
 #include "toimintovirhe.hh"
@@ -47,8 +48,8 @@ private:
 	Naytto* mScreen;
 	unsigned mAreaSize;
 	std::vector<Player> mPlayers;
-	std::map <Julkinen::Koordinaatti, Piece> mPieces;
-	std::map <Julkinen::Koordinaatti, Item> mItems;
+	std::vector<Piece> mPieces;
+	std::vector<Item> mItems;
 	int mActivePlayer;
 };
 
