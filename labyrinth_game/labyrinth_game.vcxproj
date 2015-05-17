@@ -148,6 +148,9 @@
     <None Include="testit\raakile.tst.in" />
     <None Include="testit\raakile.tst.out" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="alustustiedosto.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
