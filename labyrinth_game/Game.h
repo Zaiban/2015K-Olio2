@@ -22,7 +22,6 @@ public:
 	~Game();
 
 	// Inherited methods
-
 	bool onkoAlustustilassa() const;
 	void lisaaNaytto(Julkinen::Nayttorajapinta* naytto);
 	void maaritaPelialueenKoko(Julkinen::Koordinaatti const& koko);
@@ -37,11 +36,7 @@ public:
 	bool vaihdaVuoro();
 	Julkinen::PelaajaTyyppi haeVuorossa();
 
-	// New methods
-
-	void updateScreen();
-	bool isWallCollision(Julkinen::Suunta direction, unsigned int amount);
-	void handleCPU();
+	
 
 private:
 	bool mInitialization;
@@ -51,5 +46,11 @@ private:
 	std::vector<Piece> mPieces;
 	std::vector<Item> mItems;
 	int mActivePlayer;
+
+	// New methods
+	void updateScreen();
+	bool isWallCollision(Julkinen::Suunta direction, unsigned int amount);
+	void handleCPU();
+	std::string directionChar(Julkinen::Suunta direction);
 };
 

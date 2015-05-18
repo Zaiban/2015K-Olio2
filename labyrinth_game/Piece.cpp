@@ -2,7 +2,7 @@
 
 
 Piece::Piece(Julkinen::Koordinaatti coord, Julkinen::PalaTyyppi type, unsigned int rotation) :
-mLocation(coord), mType(type), mRotation(rotation)
+mLocation(coord), mType(type), mRotation(rotation), mSpecialType(Julkinen::ErikoispalaTyyppi()), mTarget(Julkinen::Koordinaatti())
 {
 }
 
@@ -20,6 +20,12 @@ Julkinen::PalaTyyppi Piece::getType() const{
 unsigned int Piece::getRotation() const{
 	return mRotation;
 }
+Julkinen::ErikoispalaTyyppi Piece::getSpecialType() const{
+	return mSpecialType;
+}
+Julkinen::Koordinaatti Piece::getTarget() const{
+	return mTarget;
+}
 
 void Piece::setType(Julkinen::PalaTyyppi type){
 	mType = type;
@@ -29,4 +35,10 @@ void Piece::setRotation(unsigned int rotation){
 }
 void Piece::setLocation(Julkinen::Koordinaatti coord){
 	mLocation = coord;
+}
+void Piece::setSpecialType(Julkinen::ErikoispalaTyyppi specialType){
+	mSpecialType = specialType;
+}
+void Piece::setTarget(Julkinen::Koordinaatti coord){
+	mTarget = coord;
 }

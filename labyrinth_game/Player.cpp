@@ -21,7 +21,13 @@ char Player::getAbbr() const{
 Julkinen::Koordinaatti Player::getLocation() const{
 	return mLocation;
 }
+std::string Player::getLastCommand() const{
+	return mLastCommand;
+}
 
 void Player::setLocation(Julkinen::Koordinaatti coord){
 	mLocation = coord;
+}
+void Player::setLastCommand(std::string command){
+	mLastCommand = command;
 }

@@ -10,13 +10,16 @@ public:
 	std::string getName() const;
 	char getAbbr() const;
 	Julkinen::Koordinaatti getLocation() const;
+	std::string getLastCommand() const;
 
 	void setLocation(Julkinen::Koordinaatti coord);
+	void setLastCommand(std::string command);
 
 private:
 	Julkinen::PelaajaTyyppi mType;
 	std::string mName;
 	char mAbbr;
 	Julkinen::Koordinaatti mLocation;
+	std::string mLastCommand;
 };
 
