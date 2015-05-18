@@ -3,7 +3,7 @@
 #include "vaittama.hh"
 
 Game::Game() :
-mInitialization(true), mScreen(nullptr), mAreaSize(0), mActivePlayer(0)
+mInitialization(true), mScreen(nullptr), mAreaSize(0), mActivePlayer(0), mHasPushed(false)
 {}
 
 
@@ -64,7 +64,18 @@ bool Game::onkoPelitilassa() const{
 }
 void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned int rotaatio){
 	DEBUG_OUTPUT("komentoTyonna()" << std::endl);
+
+	// Perform checks
 	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 59, "vaihdaVuoro");
+	
+	if (mHasPushed){
+		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_IRTOPALAA_ON_JO_TYONNETTY).tulosta(std::cout);
+		std::cout << std::endl;
+		mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
+		return;
+	}
+
+	// Begin construction mode
 	mScreen->komentoAloitaRakennus();
 	mInitialization = true;
 
@@ -143,30 +154,35 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 	// Set the original piece of opposite edge as the new detached piece
 	detachPiece->setLocation(Julkinen::Koordinaatti());
 
+	mHasPushed = true;
+
 	updateScreen();
+	
 	mScreen->komentoLopetaRakennus();
+	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
 	mInitialization = false;
 }
 void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 	DEBUG_OUTPUT("komentoLiiku()" << std::endl);
 	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 67, "vaihdaVuoro");
 
-	// Check for negative input.
-	// Because its unsigned, negative input means larger than max/2
+	// Perform checks
+
+	if (!mHasPushed){
+		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_IRTOPALAA_EI_OLE_TYONNETTY).tulosta(std::cout);
+		std::cout << std::endl;
+		return;
+	}
 	if (maara > ULONG_MAX / 2){
 		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_TUNNISTAMATON_PARAMETRI).tulosta(std::cout);
 		std::cout << std::endl;
 		return;
 	}
-
-
 	if (maara == 0 && suunta != Julkinen::Suunta::PAIKALLAAN){
 		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_TUNNISTAMATON_PARAMETRI).tulosta(std::cout);
 		std::cout << std::endl;
 		return;
 	}
-
-	// Check in case of wall collision
 	if (isWallCollision(suunta, maara)){
 		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_EI_VOITU_LIIKKUA_ANNETTUA_MAARAA).tulosta(std::cout);
 		return;
@@ -202,6 +218,7 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 bool Game::vaihdaVuoro(){
 	DEBUG_OUTPUT("vaihdaVuoro()" << std::endl);
 	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 70, "vaihdaVuoro");
+	mHasPushed = false;
 	mScreen->komentoAloitaRakennus();
 	mInitialization = true;
 

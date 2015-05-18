@@ -46,6 +46,7 @@ private:
 	std::vector<Piece> mPieces;
 	std::vector<Item> mItems;
 	int mActivePlayer;
+	bool mHasPushed;
 
 	// New methods
 	void updateScreen();
