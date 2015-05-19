@@ -65,7 +65,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="Item.cpp" />
     <ClCompile Include="pelitehdas.cpp" />
     <ClCompile Include="Piece.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -94,7 +93,6 @@
     <ClInclude Include="alustusvirhe.hh" />
     <ClInclude Include="debug.hh" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="Item.h" />
     <ClInclude Include="komentovirhe.hh" />
     <ClInclude Include="koordinaatti.hh" />
     <ClInclude Include="logiikkavirhe.hh" />

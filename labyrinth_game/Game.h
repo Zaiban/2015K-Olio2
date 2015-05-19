@@ -12,7 +12,6 @@
 
 #include "Player.h"
 #include "Piece.h"
-#include "Item.h"
 
 class Game :
 	public Julkinen::Pelirajapinta
@@ -44,7 +43,6 @@ private:
 	unsigned mAreaSize;
 	std::vector<Player> mPlayers;
 	std::vector<Piece> mPieces;
-	std::vector<Item> mItems;
 	int mActivePlayer;
 	bool mHasPushed;
 
