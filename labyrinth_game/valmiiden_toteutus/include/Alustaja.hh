@@ -2,7 +2,7 @@
  *	\version $Id: Alustaja.hh 1800 2011-02-05 06:54:47Z salone58 $
  *  \file  Alustaja.hh
  *  \brief Labyrintti-pelin alustuksen apuluokka ($Revision: 1800 $)
- *  \author ©2010 Eero Salonen <eero.j.salonen@tut.fi> 
+ *  \author ï¿½2010 Eero Salonen <eero.j.salonen@tut.fi> 
  */
 
 #ifndef ALUSTAJA_HH
@@ -12,37 +12,37 @@
 #include <vector>
 
 /**
- * Alustaja-luokka huolehtii alkutilanteen luomisesta peliä varten.
+ * Alustaja-luokka huolehtii alkutilanteen luomisesta peliï¿½ varten.
  *
  * \b Huom! Alustaja-luokan origo (0,0) on <em>vasemmassa alanurkassa</em>
- * ja y-suunta kasvaa ylöspäin.
+ * ja y-suunta kasvaa ylï¿½spï¿½in.
  */
 class Alustaja {
 public:
-  //! Määrittää y-koordinaatin maksimiarvon
+  //! Mï¿½ï¿½rittï¿½ï¿½ y-koordinaatin maksimiarvon
   static unsigned int const LABYRINTIN_KORKEUS = 5;
-  //! Määrittää x-koordinaatin maksimiarvon
+  //! Mï¿½ï¿½rittï¿½ï¿½ x-koordinaatin maksimiarvon
   static unsigned int const LABYRINTIN_LEVEYS = 5;
 
-  //! Merkki, jonka annaKoordinaatinEsine palauttaa, kun ruudussa ei ole esinettä
+  //! Merkki, jonka annaKoordinaatinEsine palauttaa, kun ruudussa ei ole esinettï¿½
   static char const EI_ESINETTA = 'x';
 
   /**
-   * Määrittää ruudun tyypin eri vaihtoehdot.
+   * Mï¿½ï¿½rittï¿½ï¿½ ruudun tyypin eri vaihtoehdot.
    */
   enum Ruututyyppi {
-    I, /*!< Kyseessä on harjoitustyöohjeen I-ruutu */
-    L, /*!< Kyseessä on harjoitustyöohjeen L-ruutu */
-    T  /*!< Kyseessä on harjoitustyöohjeen T-ruutu */
+    I, /*!< Kyseessï¿½ on harjoitustyï¿½ohjeen I-ruutu */
+    L, /*!< Kyseessï¿½ on harjoitustyï¿½ohjeen L-ruutu */
+    T  /*!< Kyseessï¿½ on harjoitustyï¿½ohjeen T-ruutu */
   };
 
   /**
-   * \param pelaajia Pelissä mukana olevien pelaajien määrä. Pitää olla välillä
+   * \param pelaajia Pelissï¿½ mukana olevien pelaajien mï¿½ï¿½rï¿½. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *                 2-4.
    */
   Alustaja(unsigned int pelaajia);
   /**
-   * \param pelaajia Pelissä mukana olevien pelaajien määrä. Pitää olla välillä
+   * \param pelaajia Pelissï¿½ mukana olevien pelaajien mï¿½ï¿½rï¿½. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *                 2-4.
    * \param siemen Satunnaislukugeneraattorille annettava alustusarvo.
    */
@@ -59,11 +59,11 @@ public:
 
   /**
    * Alustaja-luokan origo (0,0) on <em>vasemmassa alanurkassa</em>
-   * ja y-suunta kasvaa ylöspäin.
+   * ja y-suunta kasvaa ylï¿½spï¿½in.
    *
-   * \param x Labyrintin x-koordinaatti. Pitää olla välillä
+   * \param x Labyrintin x-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_LEVEYS.
-   * \param y Labyrintin y-koordinaatti. Pitää olla välillä
+   * \param y Labyrintin y-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_KORKEUS.
    * \return Palauttaa labyrintin alkutilanteen ruudun (x, y) tyypin.
    */
@@ -72,40 +72,40 @@ public:
 
   /**
    * Alustaja-luokan origo (0,0) on <em>vasemmassa alanurkassa</em>
-   * ja y-suunta kasvaa ylöspäin.
+   * ja y-suunta kasvaa ylï¿½spï¿½in.
    *
-   * \param x Labyrintin x-koordinaatti. Pitää olla välillä
+   * \param x Labyrintin x-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_LEVEYS.
-   * \param y Labyrintin y-koordinaatti. Pitää olla välillä
+   * \param y Labyrintin y-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_KORKEUS.
    * \return Palauttaa labyrintin alkutilanteen ruudun (x, y) rotaation.
-   *         Rotaatio on kokonaisluku välillä 1-4.
+   *         Rotaatio on kokonaisluku vï¿½lillï¿½ 1-4.
    */
   unsigned int annaKoordinaatinRotaatio(unsigned int x,
 					unsigned int y) const;
 
   /**
    * Alustaja-luokan origo (0,0) on <em>vasemmassa alanurkassa</em>
-   * ja y-suunta kasvaa ylöspäin.
+   * ja y-suunta kasvaa ylï¿½spï¿½in.
    *
-   * \param x Labyrintin x-koordinaatti. Pitää olla välillä
+   * \param x Labyrintin x-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_LEVEYS.
-   * \param y Labyrintin y-koordinaatti. Pitää olla välillä
+   * \param y Labyrintin y-koordinaatti. Pitï¿½ï¿½ olla vï¿½lillï¿½
    *          1-LABYRINTIN_KORKEUS.
-   * \return Palauttaa joko ruudussa olevaa esinettä vastaavan merkin väliltä
-   *         a-l tai vaihtoehtoisesti vakion EI_ESINETTA, jos ruutu on tyhjä.
+   * \return Palauttaa joko ruudussa olevaa esinettï¿½ vastaavan merkin vï¿½liltï¿½
+   *         a-l tai vaihtoehtoisesti vakion EI_ESINETTA, jos ruutu on tyhjï¿½.
    */
   char annaKoordinaatinEsine(unsigned int x, unsigned int y) const;
 
    char annaKoordinaatinErikoispala(unsigned int x, unsigned int y) const;
   /**
-   * \param pelaaja Pelaajan numero. Pitää olla välillä 0-(pelaajien_lkm-1).
-   * \return Palauttaa pelaajan etsittävien esineiden listan.
+   * \param pelaaja Pelaajan numero. Pitï¿½ï¿½ olla vï¿½lillï¿½ 0-(pelaajien_lkm-1).
+   * \return Palauttaa pelaajan etsittï¿½vien esineiden listan.
    */
   std::vector<char> annaPelaajanEsinelista(unsigned int pelaaja) const;
 
   /**
-   * \return Palauttaa Alustajan satunnaislukugeneraattorin käyttämän
+   * \return Palauttaa Alustajan satunnaislukugeneraattorin kï¿½yttï¿½mï¿½n
    * siemenluvun.
    */
   unsigned long int annaSiemenluku() const;

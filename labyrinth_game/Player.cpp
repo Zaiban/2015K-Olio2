@@ -42,7 +42,9 @@ std::string Player::getLastCommand() const{
 	return mLastCommand;
 }
 std::string Player::getTargetItems() const{
-	return mTargetItems;
+	std::string result = mTargetItems;
+	result.replace(result.begin() + 1, result.end(), result.size()-1, '*');
+	return result;
 }
 std::string Player::getCollectedItems() const{
 	return mCollectedItems;

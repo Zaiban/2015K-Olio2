@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <climits>
 #include <iterator>
+#include <cmath>
+#include <ctime>
 #include "pelirajapinta.hh"
 #include "koordinaatti.hh"
 #include "toimintovirhe.hh"
@@ -48,8 +50,11 @@ private:
 
 	// New methods
 	void updateScreen();
-	bool isWallCollision(Julkinen::Suunta direction, unsigned int amount);
+	bool isCollision(Julkinen::Suunta direction, unsigned int amount);
+	bool playerToPlayerCollision(int x, int y);
 	void handleCPU();
 	std::string directionChar(Julkinen::Suunta direction);
+	void movePlayer(int distance, Julkinen::Suunta direction);
+	Julkinen::Suunta randomDirection();
 };
 
