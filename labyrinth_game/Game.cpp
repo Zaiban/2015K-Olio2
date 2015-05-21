@@ -111,16 +111,32 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 		return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 	});
 
-	// Move pieces
+	// Move pieces & players
 	std::vector<Piece>::iterator movePiece;
+	std::vector<Player>::iterator movePlayer = mPlayers.end();
 	switch (reuna){
 	case Julkinen::ALA:
 		for (y += 1; y < (int)mAreaSize + 1; y++){
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
+			movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+				return player.getLocation() == Julkinen::Koordinaatti(x, y);
+			});
 			movePiece->setLocation(Julkinen::Koordinaatti(x, y - 1));
+			if (movePlayer != mPlayers.end()){
+				if (y > 1)
+					movePlayer->setLocation(Julkinen::Koordinaatti(x, y - 1));
+				else
+					movePlayer->setLocation(Julkinen::Koordinaatti(x, mAreaSize));
+			}
+			movePlayer = mPlayers.end();
 		}
+		movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+			return player.getLocation() == Julkinen::Koordinaatti(x, 1);
+		});
+		if (movePlayer != mPlayers.end())
+			movePlayer->setLocation(Julkinen::Koordinaatti(x, mAreaSize));
 		y--;
 		break;
 	case Julkinen::YLA:
@@ -128,8 +144,23 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
+			movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+				return player.getLocation() == Julkinen::Koordinaatti(x, y);
+			});
 			movePiece->setLocation(Julkinen::Koordinaatti(x, y + 1));
+			if (movePlayer != mPlayers.end()){
+				if (y < mAreaSize)
+					movePlayer->setLocation(Julkinen::Koordinaatti(x, y + 1));
+				else
+					movePlayer->setLocation(Julkinen::Koordinaatti(x, 1));
+			}
+			movePlayer = mPlayers.end();
 		}
+		movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+			return player.getLocation() == Julkinen::Koordinaatti(x, mAreaSize);
+		});
+		if (movePlayer != mPlayers.end())
+			movePlayer->setLocation(Julkinen::Koordinaatti(x, 1));
 		y++;
 		break;
 	case Julkinen::OIKEA:
@@ -137,8 +168,23 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
+			movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+				return player.getLocation() == Julkinen::Koordinaatti(x, y);
+			});
 			movePiece->setLocation(Julkinen::Koordinaatti(x - 1, y));
+			if (movePlayer != mPlayers.end()){
+				if (x > 1)
+					movePlayer->setLocation(Julkinen::Koordinaatti(x - 1, y));
+				else
+					movePlayer->setLocation(Julkinen::Koordinaatti(mAreaSize, y));
+			}
+			movePlayer = mPlayers.end();
 		}
+		movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+			return player.getLocation() == Julkinen::Koordinaatti(1, y);
+		});
+		if (movePlayer != mPlayers.end())
+			movePlayer->setLocation(Julkinen::Koordinaatti(mAreaSize, y));
 		x--;
 		break;
 	case Julkinen::VASEN:
@@ -146,8 +192,23 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
+			movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+				return player.getLocation() == Julkinen::Koordinaatti(x, y);
+			});
 			movePiece->setLocation(Julkinen::Koordinaatti(x + 1, y));
+			if (movePlayer != mPlayers.end()){
+				if (x < mAreaSize)
+					movePlayer->setLocation(Julkinen::Koordinaatti(x + 1, y));
+				else
+					movePlayer->setLocation(Julkinen::Koordinaatti(1, y));
+			}
+			movePlayer = mPlayers.end();
 		}
+		movePlayer = std::find_if(mPlayers.begin(), mPlayers.end(), [&](Player player){
+			return player.getLocation() == Julkinen::Koordinaatti(mAreaSize, y);
+		});
+		if (movePlayer != mPlayers.end())
+			movePlayer->setLocation(Julkinen::Koordinaatti(1, y));
 		x++;
 		break;
 	}
@@ -392,7 +453,7 @@ bool Game::isCollision(Julkinen::Suunta direction, unsigned int amount){
 		break;
 	case Julkinen::VASEMMALLE:
 		// check if out of game area
-		if ((x - (int)amount) < 1) 
+		if ((x - (int)amount) < 1)
 			return true;
 		// check for collision
 		for (unsigned i = 0; i < amount; i++){
@@ -489,8 +550,11 @@ void Game::handleCPU(){
 			moveDistance = std::abs(diffY);
 		}
 	}
-	else
-		return; // Should never happen
+	// if there is no difference between diffY and diffX, move to random direction
+	else{
+		moveDistance = 1;
+		priorityDirection = randomDirection();
+	}
 
 	// Test the priority direction for collisions.
 	// If test fails, reduce moveDistance by one and try again.
@@ -514,7 +578,7 @@ void Game::handleCPU(){
 
 		// Set it as the new priority direction
 		priorityDirection = rndDirection;
-		moveDistance = mAreaSize;
+		moveDistance = 1;
 
 		// Check for collisions
 		while (moveDistance > 0){
