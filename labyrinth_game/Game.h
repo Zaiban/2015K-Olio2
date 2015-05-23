@@ -6,6 +6,7 @@
 #include <iterator>
 #include <cmath>
 #include <ctime>
+#include <exception>
 #include "pelirajapinta.hh"
 #include "koordinaatti.hh"
 #include "toimintovirhe.hh"
