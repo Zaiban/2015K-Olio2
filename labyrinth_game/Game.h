@@ -10,10 +10,12 @@
 #include "koordinaatti.hh"
 #include "toimintovirhe.hh"
 #include "komentovirhe.hh"
+#include "alustusvirhe.hh"
 #include "valmiiden_toteutus\include\naytto.hh"
 
 #include "Player.h"
 #include "Piece.h"
+#include "PlayerActionStatus.h"
 
 class Game :
 	public Julkinen::Pelirajapinta
@@ -40,13 +42,14 @@ public:
 	
 
 private:
-	bool mInitialization;
+	bool mGameMode;
 	Naytto* mScreen;
 	int mAreaSize;
 	std::vector<Player> mPlayers;
 	std::vector<Piece> mPieces;
 	int mActivePlayer;
-	bool mHasPushed;
+	PlayerActionStatus mPlayerActionStatus;
+	
 
 	// New methods
 	void updateScreen();
@@ -56,4 +59,5 @@ private:
 	std::string directionChar(const Julkinen::Suunta& direction);
 	void movePlayer(const int& distance, const Julkinen::Suunta& direction);
 	Julkinen::Suunta randomDirection();
+	bool freePieceSlot(const Julkinen::Koordinaatti& coord);
 };

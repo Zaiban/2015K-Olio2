@@ -96,6 +96,9 @@
     <ClCompile Include="Piece.cpp">
       <Filter>Source Files\new</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerActionStatus.cpp">
+      <Filter>Source Files\new</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="valmiiden_toteutus\hyodykkeet.hh">
@@ -180,6 +183,9 @@
       <Filter>Header Files\new</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
+      <Filter>Header Files\new</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerActionStatus.h">
       <Filter>Header Files\new</Filter>
     </ClInclude>
   </ItemGroup>

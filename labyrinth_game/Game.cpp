@@ -3,7 +3,7 @@
 #include "vaittama.hh"
 
 Game::Game() :
-mInitialization(true), mScreen(nullptr), mAreaSize(0), mActivePlayer(0), mHasPushed(false)
+mGameMode(false), mScreen(nullptr), mAreaSize(0), mActivePlayer(0)
 {}
 
 
@@ -14,36 +14,86 @@ Game::~Game()
 		system("PAUSE");
 }
 bool Game::onkoAlustustilassa() const{
-	return mInitialization;
+	return !mGameMode;
 }
 void Game::lisaaNaytto(Julkinen::Nayttorajapinta* naytto){
 	DEBUG_OUTPUT("lisaaNaytto()" << std::endl);
+
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoAlustustilassa(), "onkoAlustustilassa", "Game.cpp", 23, "lisaaNaytto");
+
+	// Add the screen
 	mScreen = dynamic_cast<Naytto*>(naytto);
 	mScreen->komentoAloitaRakennus();
 }
 void Game::maaritaPelialueenKoko(Julkinen::Koordinaatti const& koko){
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, mScreen != nullptr, "mScreen != nullptr", "Game.cpp", 31, "maaritaPelialueenKoko");
+
+	// Define game area size
 	mAreaSize = koko.haeXkoordinaatti();
 }
 void Game::lisaaPelaaja(Julkinen::PelaajaTyyppi tyyppi, std::string const& nimi, char lyhenne, Julkinen::Koordinaatti const& sijainti){
 	DEBUG_OUTPUT("lisaaPelaaja()" << std::endl);
 
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, (int)sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeXkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, (int)sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeYkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoAlustustilassa(), "onkoAlustustilassa", "Game.cpp", 36, "lisaaPelaaja");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, mAreaSize > 0, "mAreaSize > 0", "Game.cpp", 37, "lisaaPelaaja");
 
+	if (!sijainti.onkoIrtopala()){
+		if ((int)sijainti.haeXkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize || (int)sijainti.haeYkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize)
+			throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_SIJAINTI);
+	}
+	std::vector<Player>::iterator player = mPlayers.end();
+	player = std::find_if(mPlayers.begin(), mPlayers.end(), [&sijainti](Player p){
+		return sijainti == p.getLocation();
+	});
+	if (player != mPlayers.end())
+		throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe("There is already a player on the given coordinate."));
+
+	// Add the piece
 	mPlayers.push_back(Player(tyyppi, nimi, lyhenne, sijainti));
 }
 void Game::lisaaPala(Julkinen::PalaTyyppi pala, unsigned int rotaatio, Julkinen::Koordinaatti const& sijainti){
 	DEBUG_OUTPUT("lisaaPala()" << std::endl);
-	// TO-DO: ehdot
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoAlustustilassa(), "onkoAlustustilassa", "Game.cpp", 50, "lisaaPala");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, mAreaSize > 0, "mAreaSize > 0", "Game.cpp", 51, "lisaaPala");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, freePieceSlot(sijainti), "freePieceSlot", "Game.cpp", 52, "lisaaPala");
+
+	if (!sijainti.onkoIrtopala()){
+		if ((int)sijainti.haeXkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize || (int)sijainti.haeYkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize)
+			throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_SIJAINTI);
+	}
+	if (rotaatio < 1 || rotaatio > 4)
+		throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_ROTAATIO);
+
+	// Add the piece
 	mPieces.push_back(Piece(sijainti, pala, rotaatio));
 }
 void Game::lisaaEsine(char merkki, Julkinen::Koordinaatti const& sijainti, std::string const& pelaaja){
 	DEBUG_OUTPUT("lisaaEsine()" << std::endl);
 
+	// Perform checks
+	std::vector<Player>::iterator player = mPlayers.end();
+	player = std::find_if(mPlayers.begin(), mPlayers.end(), [&pelaaja](Player p){
+		return p.getName() == pelaaja;
+	});
+	if (player == mPlayers.end())
+		throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe("Player does not exist."));
+
+	if (!sijainti.onkoIrtopala()){
+		if ((int)sijainti.haeXkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize || (int)sijainti.haeYkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize)
+			throw Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_SIJAINTI);
+	}
+
+	// Find piece where this item belongs and add it
 	for (int i = 0; i < (int)mPieces.size(); i++){
 		if (mPieces.at(i).getLocation() == sijainti)
 			mPieces.at(i).setItem(merkki);
 	}
+
+	// Find player whose target this item is and add it
 	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).getName() == pelaaja){
 			mPlayers.at(i).addTargetItem(merkki);
@@ -52,6 +102,18 @@ void Game::lisaaEsine(char merkki, Julkinen::Koordinaatti const& sijainti, std::
 }
 void Game::asetaPalanTyyppi(Julkinen::ErikoispalaTyyppi tyyppi, Julkinen::Koordinaatti const& sijainti, Julkinen::Koordinaatti const& kohde){
 	DEBUG_OUTPUT("asetaPalanTyyppi()" << std::endl);
+
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoAlustustilassa(), "onkoAlustustilassa", "Game.cpp", 57, "asetaPalanTyyppi");
+
+	if (!sijainti.onkoIrtopala()){
+		if ((int)sijainti.haeXkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize || (int)sijainti.haeYkoordinaatti() < 1 || (int)sijainti.haeXkoordinaatti() > mAreaSize)
+			Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_SIJAINTI).tulosta(std::cout);
+	}
+	if (!kohde.onkoIrtopala()){
+		if ((int)kohde.haeXkoordinaatti() < 1 || (int)kohde.haeXkoordinaatti() > mAreaSize || (int)kohde.haeYkoordinaatti() < 1 || (int)kohde.haeXkoordinaatti() > mAreaSize)
+			Julkinen::Alustusvirhe(Julkinen::Alustusvirhe::VIRHEELLINEN_SIJAINTI).tulosta(std::cout);
+	}
 
 	std::vector<Piece>::iterator currentPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 		return piece.getLocation() == sijainti;
@@ -64,28 +126,39 @@ void Game::alustusLopeta(){
 
 	updateScreen();
 	mScreen->komentoLopetaRakennus();
-	mInitialization = false;
+	mGameMode = true;
 	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
 }
 bool Game::onkoPelitilassa() const{
-	return !mInitialization;
+	return mGameMode;
 }
 void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned int rotaatio){
 	DEBUG_OUTPUT("komentoTyonna()" << std::endl);
 
 	// Perform checks
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 59, "vaihdaVuoro");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 80, "komentoTyonna");
 
-	if (mHasPushed){
+	if (mPlayerActionStatus.isPushed()){
 		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_IRTOPALAA_ON_JO_TYONNETTY).tulosta(std::cout);
 		std::cout << std::endl;
 		mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
 		return;
 	}
 
+	if ((int)paikka < 1 || (int)paikka > mAreaSize){
+		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_OLEMATON_PAIKKA).tulosta(std::cout);
+		return;
+	}
+		
+	if (rotaatio < 1 || rotaatio > 4){
+		Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_VIRHEELLINEN_ROTAATIO).tulosta(std::cout);
+		return;
+	}
+		
+
 	// Begin construction mode
 	mScreen->komentoAloitaRakennus();
-	mInitialization = true;
+	mGameMode = false;
 
 	// Get iterator to piece of opposite edge
 	int x, y;
@@ -223,25 +296,26 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 	// Set original piece of opposite edge as new detached piece
 	detachPiece->setLocation(Julkinen::Koordinaatti());
 
-	mHasPushed = true;
+	mPlayerActionStatus.setPushed();
 
 	updateScreen();
 
 	mScreen->komentoLopetaRakennus();
 	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
-	mInitialization = false;
+	mGameMode = true;
 }
 void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 	DEBUG_OUTPUT("komentoLiiku()" << std::endl);
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 67, "vaihdaVuoro");
 
 	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 242, "komentoLiiku");
 
 	if (suunta == Julkinen::AUTOMAATTI){
 		handleCPU();
+		// CPU actions handled, no reason to continue in method
 		return;
 	}
-	if (!mHasPushed){
+	if (!mPlayerActionStatus.isPushed()){
 		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_IRTOPALAA_EI_OLE_TYONNETTY).tulosta(std::cout);
 		std::cout << std::endl;
 		return;
@@ -263,6 +337,7 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 
 	// If got to this point, it is safe to move player.
 	movePlayer(maara, suunta);
+	mPlayerActionStatus.setMoved();
 
 	if (suunta == Julkinen::PAIKALLAAN)
 		mPlayers.at(mActivePlayer).setLastCommand(std::string("paikallaan"));
@@ -274,7 +349,13 @@ bool Game::vaihdaVuoro(){
 	DEBUG_OUTPUT("vaihdaVuoro()" << std::endl);
 
 	// Perform checks
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 70, "vaihdaVuoro");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 344, "vaihdaVuoro");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, mPlayerActionStatus.actionsDone(), "mPlayerActionStatus.actionsDone()", "Game.cpp", 345, "vaihdaVuoro");
+
+	if (!mPlayerActionStatus.isMoved()){
+		Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_PELAAJA_EI_OLE_LIIKKUNUT).tulosta(std::cout);
+		return true;
+	}
 
 	// Check if someone won game
 	for (int i = 0; i < (int)mPlayers.size(); i++){
@@ -287,14 +368,13 @@ bool Game::vaihdaVuoro(){
 	};
 
 	// Do things
-	mHasPushed = false;
 	mScreen->komentoAloitaRakennus();
-	mInitialization = true;
+	mGameMode = false;
 
 	updateScreen();
 
 	mScreen->komentoLopetaRakennus();
-	mInitialization = false;
+	mGameMode = true;
 
 	if (mActivePlayer == mPlayers.size() - 1)
 		mActivePlayer = 0;
@@ -303,9 +383,13 @@ bool Game::vaihdaVuoro(){
 	DEBUG_OUTPUT("Active Player:" << mActivePlayer << std::endl);
 
 	mScreen->ilmoitusVuorossa(mPlayers.at(mActivePlayer).getName());
+	mPlayerActionStatus.reset();
 	return true;
 }
 Julkinen::PelaajaTyyppi Game::haeVuorossa(){
+	// Perform checks
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 314, "haeVuorossa");
+
 	return mPlayers.at(mActivePlayer).getType();
 }
 
@@ -735,5 +819,18 @@ Julkinen::Suunta Game::randomDirection(){
 		return Julkinen::VASEMMALLE;
 	case 3:
 		return Julkinen::OIKEALLE;
+	default: 
+		return Julkinen::Suunta::PAIKALLAAN;
 	}
+	
+}
+bool Game::freePieceSlot(const Julkinen::Koordinaatti& coord){
+	std::vector<Piece>::iterator piece = mPieces.end();
+	std::find_if(mPieces.begin(), mPieces.end(), [&coord](Piece piece){
+		return piece.getLocation() == coord;
+	});
+	if (piece == mPieces.end())
+		return true;
+
+	return false;
 }
