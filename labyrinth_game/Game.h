@@ -56,5 +56,5 @@ private:
 	std::string directionChar(Julkinen::Suunta direction);
 	void movePlayer(int distance, Julkinen::Suunta direction);
 	Julkinen::Suunta randomDirection();
+	void teleportPlayer(Julkinen::Koordinaatti target);
 };
-

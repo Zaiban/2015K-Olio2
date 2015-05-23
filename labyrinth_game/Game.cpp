@@ -627,6 +627,12 @@ void Game::movePlayer(int distance, Julkinen::Suunta direction){
 					mPlayers.at(mActivePlayer).collectItem();
 					atPiece->removeItem();
 				}
+				// If piece has special type of Teleport, do teleporting and leave the method
+				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
+					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					return;
+				}
 			}
 		}
 		y--;
@@ -647,6 +653,12 @@ void Game::movePlayer(int distance, Julkinen::Suunta direction){
 					mScreen->ilmoitusEsinePoimittu(atPiece->getItem(), mPlayers.at(mActivePlayer).getName());
 					atPiece->removeItem();
 				}
+				// If piece has special type of Teleport, do teleporting and leave the method
+				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
+					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					return;
+				}
 			}
 		}
 		y++;
@@ -666,6 +678,12 @@ void Game::movePlayer(int distance, Julkinen::Suunta direction){
 					mPlayers.at(mActivePlayer).collectItem();
 					atPiece->removeItem();
 				}
+				// If piece has special type of Teleport, do teleporting and leave the method
+				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
+					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					return;
+				}
 			}
 		}
 		x--;
@@ -684,6 +702,12 @@ void Game::movePlayer(int distance, Julkinen::Suunta direction){
 				if (atPiece->getItem() == mPlayers.at(mActivePlayer).nextItem()){
 					mPlayers.at(mActivePlayer).collectItem();
 					atPiece->removeItem();
+				}
+				// If piece has special type of Teleport, do teleporting and leave the method
+				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
+					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					return;
 				}
 			}
 		}
@@ -706,4 +730,7 @@ Julkinen::Suunta Game::randomDirection(){
 	case 3:
 		return Julkinen::OIKEALLE;
 	}
+}
+void Game::teleportPlayer(Julkinen::Koordinaatti target){
+	mPlayers.at(mActivePlayer).setLocation(target);
 }
