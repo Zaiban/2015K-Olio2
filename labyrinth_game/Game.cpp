@@ -27,8 +27,8 @@ void Game::maaritaPelialueenKoko(Julkinen::Koordinaatti const& koko){
 void Game::lisaaPelaaja(Julkinen::PelaajaTyyppi tyyppi, std::string const& nimi, char lyhenne, Julkinen::Koordinaatti const& sijainti){
 	DEBUG_OUTPUT("lisaaPelaaja()" << std::endl);
 
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeXkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
-	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeYkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, (int)sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeXkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
+	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, (int)sijainti.haeXkoordinaatti() <= mAreaSize, std::string(std::to_string(sijainti.haeYkoordinaatti()) + "<" + std::to_string(mAreaSize)).c_str(), "Game.cpp", 29, "lisaaPelaaja");
 
 	mPlayers.push_back(Player(tyyppi, nimi, lyhenne, sijainti));
 }
@@ -40,11 +40,11 @@ void Game::lisaaPala(Julkinen::PalaTyyppi pala, unsigned int rotaatio, Julkinen:
 void Game::lisaaEsine(char merkki, Julkinen::Koordinaatti const& sijainti, std::string const& pelaaja){
 	DEBUG_OUTPUT("lisaaEsine()" << std::endl);
 
-	for (int i = 0; i < mPieces.size(); i++){
+	for (int i = 0; i < (int)mPieces.size(); i++){
 		if (mPieces.at(i).getLocation() == sijainti)
 			mPieces.at(i).setItem(merkki);
 	}
-	for (int i = 0; i < mPlayers.size(); i++){
+	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).getName() == pelaaja){
 			mPlayers.at(i).addTargetItem(merkki);
 		}
@@ -87,7 +87,7 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 	mScreen->komentoAloitaRakennus();
 	mInitialization = true;
 
-	// Get iterator to the piece of the opposite edge
+	// Get iterator to piece of opposite edge
 	int x, y;
 	switch (reuna){
 	case Julkinen::ALA:
@@ -116,7 +116,7 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 	std::vector<Player>::iterator movePlayer = mPlayers.end();
 	switch (reuna){
 	case Julkinen::ALA:
-		for (y += 1; y < (int)mAreaSize + 1; y++){
+		for (y += 1; y < mAreaSize + 1; y++){
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
@@ -164,7 +164,7 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 		y++;
 		break;
 	case Julkinen::OIKEA:
-		for (x += 1; x < (int)mAreaSize + 1; x++){
+		for (x += 1; x < mAreaSize + 1; x++){
 			movePiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 			});
@@ -213,14 +213,14 @@ void Game::komentoTyonna(Julkinen::Reuna reuna, unsigned int paikka, unsigned in
 		break;
 	}
 
-	// Move the current detached piece to empty slot
+	// Move current detached piece to empty slot
 	std::vector<Piece>::iterator attachPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 		return piece.getLocation() == Julkinen::Koordinaatti();
 	});
 	attachPiece->setLocation(Julkinen::Koordinaatti(x, y));
 	attachPiece->setRotation(rotaatio);
 
-	// Set the original piece of opposite edge as the new detached piece
+	// Set original piece of opposite edge as new detached piece
 	detachPiece->setLocation(Julkinen::Koordinaatti());
 
 	mHasPushed = true;
@@ -261,7 +261,7 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 		return;
 	}
 
-	// If got to this point, it is safe to move the player.
+	// If got to this point, it is safe to move player.
 	movePlayer(maara, suunta);
 
 	if (suunta == Julkinen::PAIKALLAAN)
@@ -276,8 +276,8 @@ bool Game::vaihdaVuoro(){
 	// Perform checks
 	Julkinen::vaittamaToteutus(Julkinen::ESIEHTOVAITTAMA, onkoPelitilassa(), "onkoPelitilassa", "Game.cpp", 70, "vaihdaVuoro");
 
-	// Check if someone won the game
-	for (int i = 0; i < mPlayers.size(); i++){
+	// Check if someone won game
+	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).isWinner())
 		{
 			mScreen->tulostaVoittaja();
@@ -313,7 +313,7 @@ void Game::updateScreen(){
 
 	std::for_each(mPieces.begin(), mPieces.end(), [&](Piece piece){
 		mScreen->palaLaudalle(piece.getType(), Julkinen::ErikoispalaTyyppi(), piece.getRotation(), piece.getLocation(), Julkinen::Koordinaatti());
-		// Check that there is an item on the piece
+		// Check that there is an item on piece
 		if (piece.getItem() != 'x')
 			mScreen->esineLaudalle(piece.getItem(), piece.getLocation());
 	});
@@ -324,16 +324,20 @@ void Game::updateScreen(){
 		mScreen->tulostaPelaajantiedot(player.getName(), player.getCollectedItems(), player.getTargetItems(), player.getLastCommand());
 	});
 }
-bool Game::isCollision(Julkinen::Suunta direction, unsigned int amount){
-	int x = mPlayers.at(mActivePlayer).getLocation().haeXkoordinaatti();
-	int y = mPlayers.at(mActivePlayer).getLocation().haeYkoordinaatti();
+bool Game::isCollision(const Julkinen::Suunta& direction, const unsigned& amount){
+	// Get iterator to player
+	std::vector<Player>::iterator player = mPlayers.begin() + mActivePlayer;
+
+	// Get player location
+	int x = player->getLocation().haeXkoordinaatti();
+	int y = player->getLocation().haeYkoordinaatti();
 
 	switch (direction){
 	case Julkinen::ALAS:
 		// check if out of game area
 		if ((y + (int)amount) > mAreaSize) return true;
 		// check for collision
-		for (unsigned i = 0; i < amount; i++){
+		for (int i = 0; i < (int)amount; i++){
 
 			std::vector<Piece>::iterator currentPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
@@ -414,7 +418,7 @@ bool Game::isCollision(Julkinen::Suunta direction, unsigned int amount){
 		// check if out of game area
 		if ((x + (int)amount) > mAreaSize) return true;
 		// check for collision
-		for (unsigned i = 0; i < amount; i++){
+		for (int i = 0; i < (int)amount; i++){
 
 			std::vector<Piece>::iterator currentPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
@@ -456,7 +460,7 @@ bool Game::isCollision(Julkinen::Suunta direction, unsigned int amount){
 		if ((x - (int)amount) < 1)
 			return true;
 		// check for collision
-		for (unsigned i = 0; i < amount; i++){
+		for (int i = 0; i < (int)amount; i++){
 
 			std::vector<Piece>::iterator currentPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 				return piece.getLocation() == Julkinen::Koordinaatti(x, y);
@@ -496,8 +500,8 @@ bool Game::isCollision(Julkinen::Suunta direction, unsigned int amount){
 	// If got to this point, no collisions detected
 	return false;
 }
-bool Game::playerToPlayerCollision(int x, int y){
-	for (int i = 0; i < mPlayers.size(); i++){
+bool Game::playerToPlayerCollision(const int& x, const int& y){
+	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).getLocation() == Julkinen::Koordinaatti(x, y) && mPlayers.at(i).getName() != mPlayers.at(mActivePlayer).getName()){
 			return true;
 		}
@@ -513,7 +517,7 @@ void Game::handleCPU(){
 			targetCoords = piece.getLocation();
 	});
 
-	// If the current CPU target is on a detached piece, do nothing and return
+	// If current CPU target is on a detached piece, do nothing and return
 	if (targetCoords.onkoIrtopala())
 		return;
 
@@ -556,7 +560,7 @@ void Game::handleCPU(){
 		priorityDirection = randomDirection();
 	}
 
-	// Test the priority direction for collisions.
+	// Test priority direction for collisions.
 	// If test fails, reduce moveDistance by one and try again.
 	bool safeToMove = false;
 	while (moveDistance > 0){
@@ -576,7 +580,7 @@ void Game::handleCPU(){
 		while (rndDirection == priorityDirection)
 			rndDirection = randomDirection();
 
-		// Set it as the new priority direction
+		// Set it as new priority direction
 		priorityDirection = rndDirection;
 		moveDistance = 1;
 
@@ -591,13 +595,13 @@ void Game::handleCPU(){
 
 		}
 	}
-	// Confirm that it is safe and move the CPU.
+	// Confirm that it is safe and move CPU.
 	// If its still not safe, do not move at all.
 	if (safeToMove)
 		movePlayer(moveDistance, priorityDirection);
 
 }
-std::string Game::directionChar(Julkinen::Suunta direction){
+std::string Game::directionChar(const Julkinen::Suunta& direction){
 	if (direction == Julkinen::ALAS)
 		return std::string("a");
 	else if (direction == Julkinen::YLOS)
@@ -609,116 +613,118 @@ std::string Game::directionChar(Julkinen::Suunta direction){
 
 	return std::string("");
 }
-void Game::movePlayer(int distance, Julkinen::Suunta direction){
+void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
+	// Get iterator to player
+	std::vector<Player>::iterator player = mPlayers.begin() + mActivePlayer;
 	// Get players current coordinates
-	int x = mPlayers.at(mActivePlayer).getLocation().haeXkoordinaatti();
-	int y = mPlayers.at(mActivePlayer).getLocation().haeYkoordinaatti();
+	int x = player->getLocation().haeXkoordinaatti();
+	int y = player->getLocation().haeYkoordinaatti();
 	switch (direction){
 	case Julkinen::ALAS:
-		// Loop all the pieces in players path to collect items
+		// Loop all pieces in players path to collect items
 		for (int limit = y + distance; y < limit + 1; y++){
 			if (y <= mAreaSize){
-				// Get iterator to the piece under the player
+				// Get iterator to piece under player
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
 				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == mPlayers.at(mActivePlayer).nextItem()){
-					mPlayers.at(mActivePlayer).collectItem();
+				if (atPiece->getItem() == player->nextItem()){
+					player->collectItem();
 					atPiece->removeItem();
 				}
-				// If piece has special type of Teleport, do teleporting and leave the method
+				// If piece has special type of Teleport, do teleporting and leave method
 				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					player->setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
 					return;
 				}
 			}
 		}
 		y--;
-		// Move the player
-		mPlayers.at(mActivePlayer).setLocation(Julkinen::Koordinaatti(x, y));
+		// Move player
+		player->setLocation(Julkinen::Koordinaatti(x, y));
 		break;
 	case Julkinen::YLOS:
-		// Loop all the pieces in players path to collect items
+		// Loop all pieces in players path to collect items
 		for (int limit = y - distance; y >= limit; y--){
 			if (y > 0){
-				// Get iterator to the piece under the player
+				// Get iterator to piece under player
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
 				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == mPlayers.at(mActivePlayer).nextItem()){
-					mPlayers.at(mActivePlayer).collectItem();
-					mScreen->ilmoitusEsinePoimittu(atPiece->getItem(), mPlayers.at(mActivePlayer).getName());
+				if (atPiece->getItem() == player->nextItem()){
+					player->collectItem();
+					mScreen->ilmoitusEsinePoimittu(atPiece->getItem(), player->getName());
 					atPiece->removeItem();
 				}
-				// If piece has special type of Teleport, do teleporting and leave the method
+				// If piece has special type of Teleport, do teleporting and leave method
 				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					player->setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
 					return;
 				}
 			}
 		}
 		y++;
-		// Move the player
-		mPlayers.at(mActivePlayer).setLocation(Julkinen::Koordinaatti(x, y));
+		// Move player
+		player->setLocation(Julkinen::Koordinaatti(x, y));
 		break;
 	case Julkinen::OIKEALLE:
-		// Loop all the pieces in players path to collect items
+		// Loop all pieces in players path to collect items
 		for (int limit = x + distance; x < limit + 1; x++){
 			if (x <= mAreaSize){
-				// Get iterator to the piece under the player
+				// Get iterator to piece under player
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
 				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == mPlayers.at(mActivePlayer).nextItem()){
-					mPlayers.at(mActivePlayer).collectItem();
+				if (atPiece->getItem() == player->nextItem()){
+					player->collectItem();
 					atPiece->removeItem();
 				}
-				// If piece has special type of Teleport, do teleporting and leave the method
+				// If piece has special type of Teleport, do teleporting and leave method
 				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					player->setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
 					return;
 				}
 			}
 		}
 		x--;
-		// Move the player
-		mPlayers.at(mActivePlayer).setLocation(Julkinen::Koordinaatti(x, y));
+		// Move player
+		player->setLocation(Julkinen::Koordinaatti(x, y));
 		break;
 	case Julkinen::VASEMMALLE:
-		// Loop all the pieces in players path to collect items
+		// Loop all pieces in players path to collect items
 		for (int limit = x - distance; x >= limit; x--){
 			if (x > 0){
-				// Get iterator to the piece under the player
+				// Get iterator to piece under player
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
 				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == mPlayers.at(mActivePlayer).nextItem()){
-					mPlayers.at(mActivePlayer).collectItem();
+				if (atPiece->getItem() == player->nextItem()){
+					player->collectItem();
 					atPiece->removeItem();
 				}
-				// If piece has special type of Teleport, do teleporting and leave the method
+				// If piece has special type of Teleport, do teleporting and leave method
 				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					mPlayers.at(mActivePlayer).setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, mPlayers.at(mActivePlayer).getName());
+					player->setLocation(atPiece->getTarget());
+					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
 					return;
 				}
 			}
 		}
 		x++;
-		// Move the player
-		mPlayers.at(mActivePlayer).setLocation(Julkinen::Koordinaatti(x, y));
+		// Move player
+		player->setLocation(Julkinen::Koordinaatti(x, y));
 		break;
 	}
 }
 Julkinen::Suunta Game::randomDirection(){
-	srand(time(NULL));
+	srand((unsigned)time(NULL));
 	int rnd = rand() % 4;
 	switch (rnd){
 	case 0:
@@ -730,7 +736,4 @@ Julkinen::Suunta Game::randomDirection(){
 	case 3:
 		return Julkinen::OIKEALLE;
 	}
-}
-void Game::teleportPlayer(Julkinen::Koordinaatti target){
-	mPlayers.at(mActivePlayer).setLocation(target);
 }

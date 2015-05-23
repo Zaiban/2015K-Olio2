@@ -42,7 +42,7 @@ public:
 private:
 	bool mInitialization;
 	Naytto* mScreen;
-	unsigned mAreaSize;
+	int mAreaSize;
 	std::vector<Player> mPlayers;
 	std::vector<Piece> mPieces;
 	int mActivePlayer;
@@ -50,11 +50,10 @@ private:
 
 	// New methods
 	void updateScreen();
-	bool isCollision(Julkinen::Suunta direction, unsigned int amount);
-	bool playerToPlayerCollision(int x, int y);
+	bool isCollision(const Julkinen::Suunta& direction, const unsigned& amount);
+	bool playerToPlayerCollision(const int& x, const int& y);
 	void handleCPU();
-	std::string directionChar(Julkinen::Suunta direction);
-	void movePlayer(int distance, Julkinen::Suunta direction);
+	std::string directionChar(const Julkinen::Suunta& direction);
+	void movePlayer(const int& distance, const Julkinen::Suunta& direction);
 	Julkinen::Suunta randomDirection();
-	void teleportPlayer(Julkinen::Koordinaatti target);
 };
