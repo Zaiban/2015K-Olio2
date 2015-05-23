@@ -350,11 +350,12 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 		// CPU actions handled, no reason to continue in method
 		return;
 	}
+
 	try{
 		if (!mPlayerActionStatus.isPushed()){
 			throw Julkinen::Toimintovirhe(Julkinen::Toimintovirhe::VIRHE_IRTOPALAA_EI_OLE_TYONNETTY);
 		}
-		if (maara > ULONG_MAX / 2){
+		if ((int)maara < 0){
 			throw Julkinen::Komentovirhe(Julkinen::Komentovirhe::VIRHE_TUNNISTAMATON_PARAMETRI);
 		}
 		if (maara == 0 && suunta != Julkinen::Suunta::PAIKALLAAN){
@@ -367,24 +368,30 @@ void Game::komentoLiiku(Julkinen::Suunta suunta, unsigned int maara){
 	catch (Julkinen::Toimintovirhe& tv){
 		tv.tulosta(std::cout);
 		std::cout << std::endl;
+		// At the moment, if player performs Toimintovirhe, he is NOT asked for a new command.
+		mPlayerActionStatus.setMoved();
 		return;
 	}
 	catch (Julkinen::Komentovirhe& kv){
 		kv.tulosta(std::cout);
 		std::cout << std::endl;
+		// At the moment, if player performs Toimintovirhe, he is NOT asked for a new command.
+		mPlayerActionStatus.setMoved();
 		return;
 	}
 
+	if (suunta == Julkinen::PAIKALLAAN){
+		mPlayers.at(mActivePlayer).setLastCommand(std::string("paikallaan"));
+		mPlayerActionStatus.setMoved();
+		// Player does not want to move, no reason to continue in method
+		return;
+	}
 
 	// If got to this point, it is safe to move player.
 	movePlayer(maara, suunta);
+	mPlayers.at(mActivePlayer).setLastCommand(std::string("liiku " + directionChar(suunta) + " " + std::to_string(maara)));
 	mPlayerActionStatus.setMoved();
 
-	if (suunta == Julkinen::PAIKALLAAN)
-		mPlayers.at(mActivePlayer).setLastCommand(std::string("paikallaan"));
-	else if (suunta != Julkinen::AUTOMAATTI){
-		mPlayers.at(mActivePlayer).setLastCommand(std::string("liiku " + directionChar(suunta) + " " + std::to_string(maara)));
-	}
 }
 bool Game::vaihdaVuoro(){
 	DEBUG_OUTPUT("vaihdaVuoro()" << std::endl);
@@ -403,7 +410,7 @@ bool Game::vaihdaVuoro(){
 		std::cout << std::endl;
 		return true;
 	}
-	
+
 
 	// Check if someone won game
 	for (int i = 0; i < (int)mPlayers.size(); i++){
@@ -457,6 +464,11 @@ void Game::updateScreen(){
 	});
 }
 bool Game::isCollision(const Julkinen::Suunta& direction, const unsigned& amount){
+
+	// If direction is PAIKALLAAN or AUTOMAATTI, no reason to continue in method
+	if (direction == Julkinen::PAIKALLAAN || direction == Julkinen::AUTOMAATTI)
+		return false;
+
 	// Get iterator to player
 	std::vector<Player>::iterator player = mPlayers.begin() + mActivePlayer;
 
@@ -732,6 +744,9 @@ void Game::handleCPU(){
 	if (safeToMove)
 		movePlayer(moveDistance, priorityDirection);
 
+	// Set CPU status flags
+	mPlayerActionStatus.setMoved();
+	mPlayerActionStatus.setPushed();
 }
 std::string Game::directionChar(const Julkinen::Suunta& direction){
 	if (direction == Julkinen::ALAS)
