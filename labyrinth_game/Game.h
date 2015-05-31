@@ -1,3 +1,6 @@
+/*
+	Pelirajapinta implementation by Esa Parkkila
+*/
 #pragma once
 #include <memory>
 #include <map>
@@ -12,6 +15,7 @@
 #include "toimintovirhe.hh"
 #include "komentovirhe.hh"
 #include "alustusvirhe.hh"
+#include "toteuttamaton_virhe.hh"
 #include "valmiiden_toteutus\include\naytto.hh"
 
 #include "Player.h"
@@ -55,10 +59,11 @@ private:
 	// New methods
 	void updateScreen();
 	bool isCollision(const Julkinen::Suunta& direction, const unsigned& amount);
-	bool playerToPlayerCollision(const int& x, const int& y);
+	bool playerToPlayerCollision(const int& x, const int& y) const;
 	void handleCPU();
-	std::string directionChar(const Julkinen::Suunta& direction);
+	std::string directionChar(const Julkinen::Suunta& direction) const;
 	void movePlayer(const int& distance, const Julkinen::Suunta& direction);
-	Julkinen::Suunta randomDirection();
+	Julkinen::Suunta randomDirection() const;
 	bool freePieceSlot(const Julkinen::Koordinaatti& coord);
+	bool stepOnPiece(std::vector<Piece>::iterator piece, std::vector<Player>::iterator player);
 };

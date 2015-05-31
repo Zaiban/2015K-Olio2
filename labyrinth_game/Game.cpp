@@ -10,8 +10,8 @@ mGameMode(false), mScreen(nullptr), mAreaSize(0), mActivePlayer(0)
 Game::~Game()
 {
 	DEBUG_OUTPUT("Game destructor" << std::endl);
-	if (debug_output)
-		system("PAUSE");
+
+	system("PAUSE");
 }
 bool Game::onkoAlustustilassa() const{
 	return !mGameMode;
@@ -416,8 +416,6 @@ bool Game::vaihdaVuoro(){
 	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).isWinner())
 		{
-			mScreen->tulostaVoittaja();
-			system("pause");
 			return false;
 		}
 	};
@@ -644,7 +642,7 @@ bool Game::isCollision(const Julkinen::Suunta& direction, const unsigned& amount
 	// If got to this point, no collisions detected
 	return false;
 }
-bool Game::playerToPlayerCollision(const int& x, const int& y){
+bool Game::playerToPlayerCollision(const int& x, const int& y) const{
 	for (int i = 0; i < (int)mPlayers.size(); i++){
 		if (mPlayers.at(i).getLocation() == Julkinen::Koordinaatti(x, y) && mPlayers.at(i).getName() != mPlayers.at(mActivePlayer).getName()){
 			return true;
@@ -748,7 +746,7 @@ void Game::handleCPU(){
 	mPlayerActionStatus.setMoved();
 	mPlayerActionStatus.setPushed();
 }
-std::string Game::directionChar(const Julkinen::Suunta& direction){
+std::string Game::directionChar(const Julkinen::Suunta& direction) const{
 	if (direction == Julkinen::ALAS)
 		return std::string("a");
 	else if (direction == Julkinen::YLOS)
@@ -775,17 +773,10 @@ void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
-				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == player->nextItem()){
-					player->collectItem();
-					atPiece->removeItem();
-				}
-				// If piece has special type of Teleport, do teleporting and leave method
-				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					player->setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
+				// Check if the piece under the player has an item or if it is a special piece
+				// If stepOnPiece returns false, player has stepped on teleport. If so, return to stop movement.
+				if (!stepOnPiece(atPiece, player))
 					return;
-				}
 			}
 		}
 		y--;
@@ -800,18 +791,10 @@ void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
-				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == player->nextItem()){
-					player->collectItem();
-					mScreen->ilmoitusEsinePoimittu(atPiece->getItem(), player->getName());
-					atPiece->removeItem();
-				}
-				// If piece has special type of Teleport, do teleporting and leave method
-				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					player->setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
+				// Check if the piece under the player has an item or if it is a special piece
+				// If stepOnPiece returns false, player has stepped on teleport. If so, return to stop movement.
+				if (!stepOnPiece(atPiece, player))
 					return;
-				}
 			}
 		}
 		y++;
@@ -826,17 +809,10 @@ void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
-				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == player->nextItem()){
-					player->collectItem();
-					atPiece->removeItem();
-				}
-				// If piece has special type of Teleport, do teleporting and leave method
-				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					player->setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
+				// Check if the piece under the player has an item or if it is a special piece
+				// If stepOnPiece returns false, player has stepped on teleport. If so, return to stop movement.
+				if (!stepOnPiece(atPiece, player))
 					return;
-				}
 			}
 		}
 		x--;
@@ -851,17 +827,10 @@ void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
 				std::vector<Piece>::iterator atPiece = std::find_if(mPieces.begin(), mPieces.end(), [&](Piece piece){
 					return piece.getLocation() == Julkinen::Koordinaatti(x, y);
 				});
-				// If piece has item that matches players next target, collect it
-				if (atPiece->getItem() == player->nextItem()){
-					player->collectItem();
-					atPiece->removeItem();
-				}
-				// If piece has special type of Teleport, do teleporting and leave method
-				if (atPiece->getSpecialType() == Julkinen::TELEPORTTI){
-					player->setLocation(atPiece->getTarget());
-					mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
+				// Check if the piece under the player has an item or if it is a special piece
+				// If stepOnPiece returns false, player has stepped on teleport. If so, return to stop movement.
+				if (!stepOnPiece(atPiece, player))
 					return;
-				}
 			}
 		}
 		x++;
@@ -870,7 +839,7 @@ void Game::movePlayer(const int& distance, const Julkinen::Suunta& direction){
 		break;
 	}
 }
-Julkinen::Suunta Game::randomDirection(){
+Julkinen::Suunta Game::randomDirection() const{
 	srand((unsigned)time(NULL));
 	int rnd = rand() % 4;
 	switch (rnd){
@@ -896,4 +865,33 @@ bool Game::freePieceSlot(const Julkinen::Koordinaatti& coord){
 		return true;
 
 	return false;
+}
+bool Game::stepOnPiece(std::vector<Piece>::iterator piece, std::vector<Player>::iterator player){
+	// If piece has item that matches players next target, collect it
+	if (piece->getItem() == player->nextItem()){
+		player->collectItem();
+		mScreen->ilmoitusEsinePoimittu(piece->getItem(), player->getName());
+		piece->removeItem();
+	}
+	// If piece has special type of Teleport, do teleporting and return false
+	if (piece->getSpecialType() == Julkinen::TELEPORTTI){
+		player->setLocation(piece->getTarget());
+		mScreen->ilmoitusErikoispalaanAstuttu(Julkinen::TELEPORTTI, player->getName());
+		return false;
+	}
+	// If piece has any other special type, throw ToteuttamatonVirhe
+	try{
+		if (piece->getSpecialType() == Julkinen::KIROTTU)
+			throw Julkinen::ToteuttamatonVirhe("Cursed piece has not been implemented.");
+		if (piece->getSpecialType() == Julkinen::SIUNATTU)
+			throw Julkinen::ToteuttamatonVirhe("Blessed piece has not been implemented.");
+	}
+	catch (Julkinen::ToteuttamatonVirhe& tv){
+		if (debug_output){
+			tv.tulosta(std::cout);
+			std::cout << std::endl;
+		}
+	}
+
+	return true;
 }
